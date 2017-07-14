@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Bingjie Blog</title>
+    <description>关于深度学习与量化交易、黑客与画家 | 高冰洁，Deep Learning &amp; Quantitive Analysis，Nature Language Processing，Machine Learning | 这里是 @Diane冰洁 的个人博客，与你一起发现更大的世界。</description>
+    <link>http://0.0.0.0:4000/</link>
+    <atom:link href="http://0.0.0.0:4000/feed.xml" rel="self" type="application/rss+xml" />
+    <pubDate>Fri, 14 Jul 2017 10:34:53 +0800</pubDate>
+    <lastBuildDate>Fri, 14 Jul 2017 10:34:53 +0800</lastBuildDate>
+    <generator>Jekyll v3.5.0</generator>
+    
+      <item>
+        <title>Hello 2017</title>
+        <description>&lt;blockquote&gt;
+  &lt;p&gt;“Yeah It’s on. ”&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;前言&quot;&gt;前言&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;#build&quot;&gt;跳过废话，直接看技术实现 &lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;作为一个程序员， Blog 这种轮子要是挂在大众博客程序上就太没意思了。一是觉得大部分 Blog 服务都太丑，二是觉得不能随便定制不好玩。之前因为太懒没有折腾，结果就一直连个写 Blog 的地儿都没有。&lt;/p&gt;
+
+&lt;p id=&quot;build&quot;&gt;&lt;/p&gt;
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;正文&quot;&gt;正文&lt;/h2&gt;
+
+&lt;p&gt;最近几年经过各种理财机构和专家的熏陶，普通人对于“资产配置”一词已经耳熟能详，甚至有点觉得是陈腔滥调了。但其实很多人不知道资产配置的基本原理和具体运用。其实这里包含了三部份：&lt;/p&gt;
+
+&lt;p&gt;(1)市场分析&lt;/p&gt;
+
+&lt;p&gt;(2)配置理论应用&lt;/p&gt;
+
+&lt;p&gt;(3)再平衡方式（再平衡是指当资产组合因为市场波动而偏离了原有状态时，通过及时调整资产比例而实现组合的再平衡，耶鲁投资大师大卫.斯文森将资产配置再平衡形容为“天上掉下的馅饼”）&lt;/p&gt;
+
+&lt;p&gt;而这三者形成了紧密的闭环, 就如同专业媒体常提到的耶鲁投资模式, 其实就是构建了一套完整的机构投资流程和不受市场情绪左右的严谨的投资原则，包括投资目的的设定、资金的进出、资产负债的配比、资产类别的划分及配置、投资品种和投资工具的选择、风险控制、基金经理的选择等。&lt;/p&gt;
+
+&lt;p&gt;需要说明的是，在私人银行和财富管理界，资产配置是有严格要求的，必须以“大类资产配置”为基础，而不能以个股为基础。所谓大类资产，是指股票、债券、地产、黄金等“大类别”的资产，这些资产之间具有分散性，是资产配置的基础。&lt;/p&gt;
+
+&lt;p&gt;无论资产配置的后台是人工还是电脑，这三部分都是必不可少的。但随着大数据技术和机器学习技术的普及，资产配置开始走向智能化，这里就结合我们的经验给大家做一些分享，谈谈机器学习是如何在资产配置中使用的。&lt;/p&gt;
+
+&lt;p&gt;资产配置的理论选择&lt;/p&gt;
+
+&lt;p&gt;模型开发者可根据市场不同情况，利用不同的配置理论与再平衡方式，为投资人提供智能配置与调仓服务, 我们举三种常见的配置组合类型如下：&lt;/p&gt;
+
+&lt;p&gt;懒人组合(1/N):
+在这种组合方式里，假设4个投资标的, 则每个配置25%,而懒人组合常搭配的调仓方式有三种, ：&lt;/p&gt;
+
+&lt;p&gt;(a)买入并持有策略(Buy-and-hold Strategy)&lt;/p&gt;
+
+&lt;p&gt;(b)恒定混合策略(Constant-mix Strategy)&lt;/p&gt;
+
+&lt;p&gt;(c)固定比例投资组合保险策略 CPPI(Constant proportion portfolio insurance)&lt;/p&gt;
+
+&lt;p&gt;我们以方法(b) 恒定混合策略为例, 看看当一定期间后该配比与原配置不同时, 触发调整进行再平衡是如何进行的。 首先, 假设我们配置在美国股市、中国股市、债市、黄金各25%,并设定一个季度后做出调整。&lt;/p&gt;
+
+&lt;p&gt;那么在再平衡时, 美股、A股需要调降至25%, 而债市与黄金则需增配至25%, 尔后每季度调整, 即完成再平衡流程, 所以懒人投资法是不需要运用复杂的机器学习的方式。&lt;/p&gt;
+
+&lt;p&gt;风险平价组合(Risk Parity):&lt;/p&gt;
+
+&lt;p&gt;风险平价是对投资组合中不同资产分配相同的风险权重的一种资产配置理念, 在一般情况下股票、商品投资的风险较高, 债券的风险较低, 因此在配置时则会降低高风险资产配置, 使其所贡献的风险相同, 在假设资产相关性相等的条件下, 我们能把某一类资产i 藉由risk-parity计算后, 其配置权重表示如下, 但由于Risk-Parity 并不考虑收益, 只考量波动率(风险)，在实务应用中比较适合能提供良好收益的资产或产品, 因此普遍应用在Fund of funds (FOF)的配置模式, 当大家看完公式后, 是不是觉得你也能成为FOF 投资经理?&lt;/p&gt;
+
+&lt;p&gt;但倘若要成为优秀的投资经理, 就必须对波动率(风险)衡量做番苦工, 传统的方式包括历史波动率模型(Exponential Weighted Moving Average，EWMA)、 隐含波动率模型（Implied Volatility）、以及时间序列一系列模型(GARCH)。&lt;/p&gt;
+
+&lt;p&gt;随着机器学习的崛起,近期也发展出了基于大数据的深度学习模型来预测波动率。比如来自斯坦福大学和Google的学者联合发表了论文“Deep Learning Stock Volatilities with Google Domestic Trends”，利用Google搜索趋势的数据和递归神经元的学习方式来预测股市波动率，其预测效果比传统线性模型或GARCH模型提升31%以上。 因此只要运用得当, 对于采用Risk-Parity的方式, 能提供更好的配置结果。&lt;/p&gt;
+
+&lt;p&gt;马科维茨的均值方差-有效前沿组合或Black-Litterment模型修正:&lt;/p&gt;
+
+&lt;p&gt;有效前沿组合是多数学过金融学的学生都耳熟能详的配置方式, 在有n种资产的投资&lt;/p&gt;
+
+&lt;p&gt;组合中，为各资产的投资权重，对应的收益率为，&lt;/p&gt;
+
+&lt;p&gt;则投资组合的预期收益与险如下：&lt;/p&gt;
+
+&lt;p&gt;模型主要寻找 “收益/风险”(单位风险下的收益)的优化配置组合, 因此优化方程&lt;/p&gt;
+
+&lt;p&gt;表达式如下：&lt;/p&gt;
+
+&lt;p&gt;经由拉格朗日乘值法求解得到的投资权重就是模型的最优投资方案。若把优化投资组合在以标准方差(波动率)为横坐标，预期收益率为纵坐标的二维平面中描绘出来，形成一条曲线。&lt;/p&gt;
+
+&lt;p&gt;这条曲线越往右边投资组合风险越高, 但相对收益也较高, 也符合一般对于高风险对应高收益的认知, 既然有了这个特性, 我们便能将风险选择对应到不同客户属性的配置方案。因此有效前沿组合便成了资产配置的理论基础。&lt;/p&gt;
+
+&lt;p&gt;构造资产配置组合的三大关键点&lt;/p&gt;
+
+&lt;p&gt;现在我们确定用马科维茨的均值方差-有效前沿理论为资产配置组合的基础。&lt;/p&gt;
+
+&lt;p&gt;从这我们可以衍生出三个构造模型的关键点：(1)如何预估风险、 (2)如何预估收益、(3)如何正确的分类用户属性 。&lt;/p&gt;
+
+&lt;p&gt;（1）预估风险&lt;/p&gt;
+
+&lt;p&gt;对于第1点的处理, 可以使用我们上文已经提过到过的，Deep Learning的方式来改善风险预估的困难程度。&lt;/p&gt;
+
+&lt;p&gt;（2）预估收益&lt;/p&gt;
+
+&lt;p&gt;而对于第2点收益预估部份, 运用机器学习好处有：输入资料形态限制较低；可作线性/非线性学习；自我演化、修正等等。机器学习可以对模型因子做出有监督学习, 因子的选择可包含基本面、技术面、筹码面数据, 并做出市场收益的对应估计。下图展示了美国股市运用决策树因子模型分析收益的案例。&lt;/p&gt;
+
+&lt;p&gt;预估收益有多种办法。我们将几种不同的收益预估模型测算出来的资产收益，作为输入参数放入马科维茨的有效前沿模型或者Black-Litterment模型计算，并分析其对投资组合的影响，也就是投资收益的表现。&lt;/p&gt;
+
+&lt;p&gt;下面我们用三种方法来预估收益，一种是支持向量机回归模型（SVM），一种是线性回归模型，这两种模型的分析因子包括利率、市盈率、市净率、股息率、企业盈收、成交值、隐含波动率、MACD、KD等。而第三种则是一般人最常用的，直接用过去几年市场的走势来预测未来市场。&lt;/p&gt;
+
+&lt;p&gt;(3)客户属性分类&lt;/p&gt;
+
+&lt;p&gt;最后我们来看第3点也就是客户分类的机器学习部份，坦率说迄今为止金融机构对用户的数据掌握最多，可以通过记录消费者的消费喜好、收入状况、年龄阶段，推荐客户可能需要的贷款、融资等金融产品。机器学习将用户数据收集后进行规整处理，转化为相同维度的特征向量，通过聚类，回归，关联等各种分类器。&lt;/p&gt;
+
+&lt;p&gt;RFM模型是用户价值研究中的经典模型，基于近度 (Recency)、频度(Frequency)和额度(Monetary)这3个指标对用户进行聚类, 找出具有潜在价值的用户, 从而辅助商业决策，提高营销效率、复购率与转化率, 但多属于单一金融产品营销, 较适合于战术投资配置推荐, 对于风险承受匹配于马科维茨的配置应用则尚未成熟, 因此一般仍以符合监管的主动风险划分方式, 再依据模型优化解帮助客户提供投资资产组合。&lt;/p&gt;
+
+&lt;p&gt;综上所述，我们不难发现机器学习对于资产配置组合的应用实践已经非常丰富, 对于金融机构与资产管理公司来说, 加强金融科技研发人才培育, 可能是未来几年的重要任务。&lt;/p&gt;
+
+&lt;p&gt;参考文献：&lt;/p&gt;
+
+&lt;p&gt;[1] S. Maillard, T. Roncalli and J. Teiletche: The properties of equally-weighted risk contributions portfolios. Journal of Portfolio Management,Vol.36, No.4 pp.60-70,2010.&lt;/p&gt;
+
+&lt;p&gt;[2] R. Xiong, E.P.Nicholas and Y. Shen: Deep learning stock volatilities with google domestic trends. arXiv preprint arXiv:1512.04916,2015.&lt;/p&gt;
+
+&lt;h2 id=&quot;后记&quot;&gt;后记&lt;/h2&gt;
+
+&lt;p&gt;作者：贾宜宸
+链接：https://www.zhihu.com/question/58616635/answer/160109081
+来源：知乎
+著作权归作者所有，转载请联系作者获得授权。&lt;/p&gt;
+
+&lt;p&gt;—— Hux 后记于 2017.7&lt;/p&gt;
+
+</description>
+        <pubDate>Thu, 13 Jul 2017 20:00:00 +0800</pubDate>
+        <link>http://0.0.0.0:4000/2017/07/13/hello-2015/</link>
+        <guid isPermaLink="true">http://0.0.0.0:4000/2017/07/13/hello-2015/</guid>
+        
+        <category>生活</category>
+        
+        
+      </item>
+    
+  </channel>
+</rss>
