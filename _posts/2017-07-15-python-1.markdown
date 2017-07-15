@@ -1,0 +1,138 @@
+---
+layout:     post
+title:      "为什么在执行八皇后程序的时候python比c++慢那么多"
+subtitle:   "有必要详细了解下python的性能"
+date:       2017-07-15
+author:     "Diane"
+header-img: "img/post-bg-os-metro.jpg"
+tags:
+
+---
+
+## 前言
+
+[这是一个简单而又痛苦的开始...](#build) 
+
+很久之前就学习了python但是一直没有做一个系统性的总结，最近开了博客就总结下。
+
+<p id = "build"></p>
+---
+## 正文
+
+<p>这个八皇后的DFS，我的C++代码在不加某些评估性剪枝的情况下对15需要算18s左右（开O2大约8.6秒），但是可以确定的是你的解决方案里用了循环与递归。接下来需要分析的无非是Python慢在哪个细节，以及能否改进的问题。下面是两段用来测试的代码，首先是Python的：</p>
+
+    import time
+    
+    def calc(n, i=0, cols=0, diags=0, trans=0):
+        if i == n:
+            return 1
+        else:
+            rt = 0
+            for j in range(n):
+                col = 1 << j
+                diag = 1 << (i - j + n - 1)
+                tran = 1 << (i + j)
+                if (col & cols) == 0 and (diag & diags) == 0 and (tran & trans) == 0:
+                    rt += calc(n, i+1, cols | col, diags | diag, trans | tran)
+            return rt
+    
+    if __name__ == '__main__':
+        t = time.time()
+        print(calc(13))
+        print(time.time() - t)
+
+以及C++代码：
+
+    #include <chrono>
+    #include <iostream>
+    
+    using namespace std;
+    
+    long calc(int n, int i = 0, long cols = 0, long diags = 0, long trans = 0) {
+        if (i == n) {
+            return 1;
+        } else {
+            long rt = 0;
+            for (int j = 0; j < n; j++) {
+                long col = (1 << j);
+                long diag = (1 << (i - j + n - 1));
+                long tran = (1 << (i + j));
+                if (!(col & cols) && !(diag & diags) && !(tran & trans)) {
+                    rt += calc(n, i + 1, col | cols, diag | diags, tran | trans);
+                }
+            }
+            return rt;
+        }
+    }
+    
+    int main() {
+        auto t = chrono::system_clock::now();
+        cout << calc(13) << endl;
+        cout << (chrono::system_clock::now() - t).count() * 1e-6 << endl;
+        return 0;
+    }
+
+<p>编译器用的Clang++ 8.1.0，Python解释器则是CPython 3.6.0。由于这里压根不涉及多线程问题，那基本上就跟GIL没有关系了。对于n=13，C++代码跑了0.48秒。为了确保不是编译器悄悄干了活，使用了-O0（实际上开O2能到0.2秒左右）。Python跑了24秒。对于这个例子，最直接的影响其实在于：Python是逐句解释执行的，C++是先编译成本地代码，期间还有编译期的类型检查，不存在动态类型、动态检查，并且可以进行编译器优化。之后应该考虑一下能不能提高一点点效率呢？然后根据一般规律，Python的循环很慢，可以考虑改成列表展开：</p>
+
+    def calc(n, i=0, cols=0, diags=0, trans=0):
+        if i == n:
+            return 1
+        else:
+            return sum(
+                [
+                    calc(n, i + 1, cols | (1 << j), diags | (1 << (i - j + n - 1)), trans | (1 << (i + j)))
+                    for j in range(n)
+                    if (cols & (1 << j)) == 0 and (diags & (1 << (i - j + n - 1))) == 0 and (trans & (1 << (i + j))) == 0
+                ]
+            )
+
+<p>理应速度更快，实时也验证了：这样的Python代码需要跑18秒左右。仍然存在数量级的差异，并没有解决根本问题，但是说明了一点，CPython中for loop的实现其实一点都不快。而后考虑一下，如果我们使用其它解释器，特别是包含JIT的解释器，它将在执行过程中尝试将代码编译成本地二进制编码并执行，同时还能赋予一些额外优化，会不会好很多？那么单纯地尝试一下PyPy3(5.8.0-beta, Python 3.5.3)，代码能有多快？实际上，单纯的只是替换一下解释器，换成PyPy来做的话，原本这个24s的Python源码就只需要1s左右了。单单一个JIT可以使得性能提升一个数量级，充分说明官方的CPython解释器的性能不好，PyPy的JIT比较简单纯粹，并不是很激进，但是同样的代码如果能借助更好的JIT，以及更高性能的库，则可以体现出完全不同的性能差。例如，如果使用llvm做JIT，同时加上能使用一些成熟的数学库做优化。我们知道NumPy这样的C扩展能够很大程度提高Python做数值计算的性能，同样的我们也可以用Cython或者直接用C写Python扩展来强化计算能力。但是人都是懒的，重新写代码实在是有些麻烦。对于Python这种生态强大的玩意来说，如果计算代码中只是单纯的使用了numpy的简单结构以及Python自身的标准结构，使用numba可能是最简单快速的办法。</p>
+
+    import time
+    
+    
+    from numba import jit
+    
+    
+    @jit
+    def calc(n, i=0, cols=0, diags=0, trans=0):
+        if i == n:
+            return 1
+        else:
+            rt = 0
+            for j in range(n):
+                col = 1 << j
+                diag = 1 << (i - j + n - 1)
+                tran = 1 << (i + j)
+    
+                if (col & cols) == 0 and (diag & diags) == 0 and (tran & trans) == 0:
+                    rt += calc(n, i+1, cols | col, diags | diag, trans | tran)
+            return rt
+    
+    
+    
+    if __name__ == '__main__':
+        t = time.time()
+        print(calc(13))
+        print(time.time() - t)
+        
+        
+<p>这里只是很简单地加入了两行代码：从numba导入jit，用jit装饰计算函数。这段代码的运行时间直接就缩短到了0.4s，和C++版本的O0编译后的程序速度几乎一样。这还是考虑到JIT需要预热的情况在内。这段代码，若是计算15的规模，只需要6.5s左右，甚至优于开O2的C++版本。究其原因，JIT不仅仅在运行过程中将代码转为本地机器码，同时还会尝试进行优化。如果用cProfile之类的玩意分析一下运行过程，可以清楚看到这个优化过程。
+</p>
+<p>
+其实numba也是基于llvm的，这一点没啥差异；差异在于编译的优化是在编译时进行优化，目标代码是保持程序完整功能的；JIT是运行时的即时编译，同样的函数会被JIT编译若干次并在运行时选择最快的，从而优化其性能。例如全在栈空间的问题，C++里每次调用固定了内存大小，但JIT单元可能会在不同的时候使用不同的变量大小，甚至可能直接转成尾递归再优化也说不准……我没去翻JIT结果，也没去深究numba的JIT实现（如果是numba pro，可以确定的是它还直接使用三方库以及SIMD等特性加速），但是提高效果是可以看到的。
+</p>
+<p>
+编译语言和解释语言，从本质上来说就是完全不同的：编译语言能最终直接对应到机器码。C/C++是典型的编译语言。有JIT的解释语言和真·解释语言，从实现上来说完全不同：JIT可以通过技术手段将解释语言进行重新整理，变成适合编译的结构，然后再转换成机器码，得到接近于编译语言的性能。典型的JIT语言是Java、Javascript同样是解释语言，抽象层次低的语言会比抽象层次高的语言实现起来更容易，运行也更快，典型的如Lua而CPython不巧是那个解释的、没有JIT的、而且抽象层次很高的语言。所以首先CPython就不该跟C++比，最应该比的是Javascript，它跟Javascript比起来最大的负担在于与CPython兼容，比如说支持C API——CPython有一组规定好的数据结构和接口用来让Python和C进行互操作，这个接口保证了Python可以调用C，C也能调用Python，但是这严重妨碍了JIT引擎的设计；再比如CPython的引用计数与标记-扫描混用的GC算法。
+</p>
+<p>
+JIT又称为准时制生产方式（Just In Time简称JIT），又称作无库存生产方式（stockless production），零库存（zero inventories），一个流（one-piece flow）或者超级市场生产方式（supermarket production）。
+</p>
+<p>
+JIT是just in time,即时编译技术。使用该技术，能够加速java程序的执行速度。下面，就对该技术做个简单的讲解。
+首先，我们大家都知道，通常javac将程序源代码编译，转换成java字节码，JVM通过解释字节码将其翻译成对应的机器指令，逐条读入，逐条解释翻译。很显然，经过解释执行，其执行速度必然会比可执行的二进制字节码程序慢。为了提高执行速度，引入了JIT技术。在运行时JIT会把翻译过的机器码保存起来，已备下次使用，因此从理论上来说，采用该JIT技术可以，可以接近以前纯编译技术。当JIT编译启用时（默认是启用的），JVM读入.class文件解释后，将其发给JIT编译器。JIT编译器将字节码编译成本机机器代码。由于JIT对每条字节码都进行编译，造成了编译过程负担过重。为了避免这种情况，当前的JIT只对经常执行的字节码进行编译，如循环等。需要说明的是，JIT并不总是奏效，不能期望JIT一定能够加速你代码执行的速度，更糟糕的是她有可能降低代码的执行速度。这取决于你的代码结构，当然很多情况下我们还是能够如愿以偿的。
+</p>
+
+## 后记
+
+python的效率低还有可能是多线程的问题，下一节总结多线程问题的解决方案。
