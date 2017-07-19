@@ -18,7 +18,7 @@ tags:
 <p id = "build"></p>
 ---
 ## 正文
-
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
 <p>因子模型
 因子模型是通过其他若干项资产回报的线性组合来解释一项资产回报的一种方式，因子模型的一般形式是：</p>
 <p>
@@ -67,71 +67,71 @@ Y_{portfolio}=α+βX_{hs300}
 
 <blockquote>风险管理</blockquote>
 
-减少因子风险暴露的过程称为风险管理。对冲是在实践中进行风险管理的最佳方式之一。
+<p>减少因子风险暴露的过程称为风险管理。对冲是在实践中进行风险管理的最佳方式之一。
 
-本文通过具体案例来了解如何做到市场风险对冲的，我们使用贵州茅台和基准沪深300来构建我们的投资组合，将沪深300的权重设为-β（由于持有基准空头头寸）。
+本文通过具体案例来了解如何做到市场风险对冲的，我们使用贵州茅台和基准沪深300来构建我们的投资组合，将沪深300的权重设为-β（由于持有基准空头头寸）。</p>
 
 ##代码
 
-# 得到过去一年得到的alpha 和beta值
-start_date = '2014-01-01'
-end_date = '2015-01-01'
-asset = D.history_data('600519.SHA',start_date,end_date,fields=['close']).set_index('date')['close']
-benchmark = D.history_data('000300.SHA',start_date,end_date,fields=['close']).set_index('date')['close']
-r_a = asset.pct_change()[1:]
-r_b = benchmark.pct_change()[1:]
-X = r_b.values
-Y = r_a.values
-historical_alpha, historical_beta = linreg(X,Y)
-print('Asset Historical Estimate:')
-print('alpha: ' + str(historical_alpha))
-print('beta: ' + str(historical_beta))
+		# 得到过去一年得到的alpha 和beta值
+		start_date = '2014-01-01'
+		end_date = '2015-01-01'
+		asset = D.history_data('600519.SHA',start_date,end_date,fields=['close']).set_index('date')['close']
+		benchmark = D.history_data('000300.SHA',start_date,end_date,fields=['close']).set_index('date')['close']
+		r_a = asset.pct_change()[1:]
+		r_b = benchmark.pct_change()[1:]
+		X = r_b.values
+		Y = r_a.values
+		historical_alpha, historical_beta = linreg(X,Y)
+		print('Asset Historical Estimate:')
+		print('alpha: ' + str(historical_alpha))
+		print('beta: ' + str(historical_beta))
 
-# 获取下一年的数据:
-start_date = '2015-01-01'
-end_date = '2015-06-01'
-asset = D.history_data('600519.SHA',start_date,end_date,fields=['close']).set_index('date')['close']
-benchmark = D.history_data('000300.SHA',start_date,end_date,fields=['close']).set_index('date')['close']
-asset.name = '600519.SHA'
-benchmark.name = '000300.SHA'
-# 重复前面的过程来计算alpha 和beta值
-r_a = asset.pct_change()[1:]
-r_b = benchmark.pct_change()[1:]
-X = r_b.values
-Y = r_a.values
-alpha, beta = linreg(X,Y)
-print('Asset Out of Sample Estimate:')
-print('alpha: ' + str(alpha))
-print('beta: ' + str(beta))
+		# 获取下一年的数据:
+		start_date = '2015-01-01'
+		end_date = '2015-06-01'
+		asset = D.history_data('600519.SHA',start_date,end_date,fields=['close']).set_index('date')['close']
+		benchmark = D.history_data('000300.SHA',start_date,end_date,fields=['close']).set_index('date')['close']
+		asset.name = '600519.SHA'
+		benchmark.name = '000300.SHA'
+		# 重复前面的过程来计算alpha 和beta值
+		r_a = asset.pct_change()[1:]
+		r_b = benchmark.pct_change()[1:]
+		X = r_b.values
+		Y = r_a.values
+		alpha, beta = linreg(X,Y)
+		print('Asset Out of Sample Estimate:')
+		print('alpha: ' + str(alpha))
+		print('beta: ' + str(beta))
 
-# 构建对冲投资组合来计算alpha、beta
-portfolio = -1*historical_beta*r_b + r_a
-P = portfolio.values
-alpha, beta = linreg(X,P)
-print('Portfolio Out of Sample:')
-print ('alpha: ' + str(alpha))
-print ('beta: ' + str(beta))
-
-
-# 绘制图形
-portfolio.name = "600519.SHA + Hedge"
-portfolio.plot(alpha=0.9,figsize=[9,6])
-r_a.plot(alpha=0.5);
-r_b.plot(alpha=0.5)
-plt.ylabel("Daily Return")
-plt.legend();
+		# 构建对冲投资组合来计算alpha、beta
+		portfolio = -1*historical_beta*r_b + r_a
+		P = portfolio.values
+		alpha, beta = linreg(X,P)
+		print('Portfolio Out of Sample:')
+		print ('alpha: ' + str(alpha))
+		print ('beta: ' + str(beta))
 
 
+		# 绘制图形
+		portfolio.name = "600519.SHA + Hedge"
+		portfolio.plot(alpha=0.9,figsize=[9,6])
+		r_a.plot(alpha=0.5);
+		r_b.plot(alpha=0.5)
+		plt.ylabel("Daily Return")
+		plt.legend();
 
-Asset Historical Estimate:
-alpha: 0.00116253939056
-beta: 0.672934653004
-Asset Out of Sample Estimate:
-alpha: 0.00020366206079
-beta: 0.866552969103
-Portfolio Out of Sample:
-alpha: 0.000203662008879
-beta: 0.193618313006
+
+
+		Asset Historical Estimate:
+		alpha: 0.00116253939056
+		beta: 0.672934653004
+		Asset Out of Sample Estimate:
+		alpha: 0.00020366206079
+		beta: 0.866552969103
+		Portfolio Out of Sample:
+		alpha: 0.000203662008879
+		beta: 0.193618313006
 
 <p>从上图可以看出，对冲后的收益降低了，但波动性也降低了。历史估计出的贝塔值在样本外的一年中是有效的，将资产的贝塔值0.673通过对冲降低到了0.193，也就是说降低了2/3，这样的对冲效果是比较明显的，而且也反映出历史的贝塔值是有效的，当然，要做到更好的效果，可以采取滚动估计贝塔的方法。</p>
 <p>市场中性策略是指同时构建多头和空头头寸以对冲市场风险，在市场不论上涨或者下跌的环境下均能获得稳定收益的一种投资策略，市场中性策略主要依据统计套利的量化分析。</p>
@@ -171,92 +171,93 @@ FMCAR_{j}=\frac{bj\sum_{i=1}^{k}{b_{i}cov(F_{j},F_{i})}}{(Active Risk)^2}
 
 <p>下面我们运用多因素模型和线性回归工具来计算某只股票的回报率相对于这些因子的风险暴露程度。我们以某个资产组合的主动收益作为被解释变量，对因子做回归，一个因子对主动收益贡献越大，那么这个资产组合的主动收益对于该因子的暴露程度也越高。</p>
 
-# 我们以5只股票的组合（portfolio）举例
-instruments = D.instruments()[:5]
-Stock_matrix = D.history_data(instruments,start_date,end_date,fields=['close'])
-Stock_matrix = pd.pivot_table(Stock_matrix,values='close',index=['date'],columns=['instrument'])
-portfolio = Stock_matrix.pct_change()[1:]
-# 组合的每日收益率（等权重组合）
-R = np.mean(portfolio, axis=1)
-# 基准收益率
-bench = D.history_data('000300.SHA',start_date, end_date, fields=['close']).set_index('date')['close'].pct_change()[1:]
-# 主动收益率
-active = R - bench
-# 建立一个常数项，为下文回归做准备
-constant = pd.TimeSeries(np.ones(len(active.index)), index=active.index)
-df = pd.DataFrame({'R': active,
-'F1': SMB,
-'F2': HML,
-'Constant': constant})
-# 删除含有缺失值的行
-df = df.dropna()
-#线性回归并获取回归系数
-b1, b2 = regression.linear_model.OLS(df['R'], df[['F1', 'F2']]).fit().params
-# 因子对于主动收益的敏感性（即因子暴露）
-print('Sensitivities of active returns to factors:\nSMB: %f\nHML: %f' %  (b1, b2))
-Sensitivities of active returns to factors:
-SMB: 0.430179
-HML: -0.104828
-利用前文给的公式，计算因子对主动收益风险平方的边际贡献（factors' marginal contributions to active risk squared，FMCAR ）
+	# 我们以5只股票的组合（portfolio）举例
+	instruments = D.instruments()[:5]
+	Stock_matrix = D.history_data(instruments,start_date,end_date,fields=['close'])
+	Stock_matrix = pd.pivot_table(Stock_matrix,values='close',index=['date'],columns=['instrument'])
+	portfolio = Stock_matrix.pct_change()[1:]
+	# 组合的每日收益率（等权重组合）
+	R = np.mean(portfolio, axis=1)
+	# 基准收益率
+	bench = D.history_data('000300.SHA',start_date, end_date, fields=['close']).set_index('date')['close'].pct_change()[1:]
+	# 主动收益率
+	active = R - bench
+	# 建立一个常数项，为下文回归做准备
+	constant = pd.TimeSeries(np.ones(len(active.index)), index=active.index)
+	df = pd.DataFrame({'R': active,
+	'F1': SMB,
+	'F2': HML,
+	'Constant': constant})
+	# 删除含有缺失值的行
+	df = df.dropna()
+	#线性回归并获取回归系数
+	b1, b2 = regression.linear_model.OLS(df['R'], df[['F1', 'F2']]).fit().params
+	# 因子对于主动收益的敏感性（即因子暴露）
+	print('Sensitivities of active returns to factors:\nSMB: %f\nHML: %f' %  (b1, b2))
+	Sensitivities of active returns to factors:
+	SMB: 0.430179
+	HML: -0.104828
+	利用前文给的公式，计算因子对主动收益风险平方的边际贡献（factors' marginal contributions to active risk squared，FMCAR ）
 
-# 计算因子风险贡献
-F1 = df['F1']
-F2 = df['F2']
-cov = np.cov(F1, F2)
-ar_squared = (active.std())**2
-fmcar1 = (b1*(b2*cov[0,1] + b1*cov[0,0]))/ar_squared
-fmcar2 = (b2*(b1*cov[0,1] + b2*cov[1,1]))/ar_squared
-print('SMB Risk Contribution:', fmcar1)
-print('HML Risk Contribution:', fmcar2)
-SMB Risk Contribution: 0.145330519205
-HML Risk Contribution: 0.0321851978612
-余下的风险可以归结于一些特有的风险因素，即我们没有加入模型的因子或者资产组合本身独有的某种风险。 通常我们会关注一下对这些因子的风险暴露随时间如何变化。让我们rolling一下～
+	# 计算因子风险贡献
+	F1 = df['F1']
+	F2 = df['F2']
+	cov = np.cov(F1, F2)
+	ar_squared = (active.std())**2
+	fmcar1 = (b1*(b2*cov[0,1] + b1*cov[0,0]))/ar_squared
+	fmcar2 = (b2*(b1*cov[0,1] + b2*cov[1,1]))/ar_squared
+	print('SMB Risk Contribution:', fmcar1)
+	print('HML Risk Contribution:', fmcar2)
+	SMB Risk Contribution: 0.145330519205
+	HML Risk Contribution: 0.0321851978612
 
-# 计算滚动的beta
-model = pd.stats.ols.MovingOLS(y = df['R'], x=df[['F1', 'F2']], 
-window_type='rolling', 
-window=100)   
-rolling_parameter_estimates = model.beta
-rolling_parameter_estimates.plot()
-plt.title('Computed Betas');
-plt.legend(['F1 Beta', 'F2 Beta', 'Intercept']);
+<p>余下的风险可以归结于一些特有的风险因素，即我们没有加入模型的因子或者资产组合本身独有的某种风险。 通常我们会关注一下对这些因子的风险暴露随时间如何变化。让我们rolling一下～</p>
+
+		# 计算滚动的beta
+		model = pd.stats.ols.MovingOLS(y = df['R'], x=df[['F1', 'F2']], 
+		window_type='rolling', 
+		window=100)   
+		rolling_parameter_estimates = model.beta
+		rolling_parameter_estimates.plot()
+		plt.title('Computed Betas');
+		plt.legend(['F1 Beta', 'F2 Beta', 'Intercept']);
 
 现在我们来看看FMCAR是如何随时间变化的
-# 计算方差协方差
-# 去除有缺省值的日期，从有实际有效值的日期开始
-covariances = pd.rolling_cov(df[['F1', 'F2']], window=100)[99:]
-# 计算主动风险
-active_risk_squared = pd.rolling_std(active, window = 100)[99:]**2
-# 计算beta
-betas = rolling_parameter_estimates[['F1', 'F2']]
+		# 计算方差协方差
+		# 去除有缺省值的日期，从有实际有效值的日期开始
+		covariances = pd.rolling_cov(df[['F1', 'F2']], window=100)[99:]
+		# 计算主动风险
+		active_risk_squared = pd.rolling_std(active, window = 100)[99:]**2
+		# 计算beta
+		betas = rolling_parameter_estimates[['F1', 'F2']]
 
-# 新建一个空的dataframe
-FMCAR = pd.DataFrame(index=betas.index, columns=betas.columns)
+		# 新建一个空的dataframe
+		FMCAR = pd.DataFrame(index=betas.index, columns=betas.columns)
 
-# 每个因子循环
-for factor in betas.columns:
-# 每一天循环
-for t in betas.index:
-# 求beta与协方差之积的和，见公式
-s = np.sum(betas.loc[t] * covariances[t][factor])
-# 获取beta
-b = betas.loc[t][factor]
-# 获取主动风险
-AR = active_risk_squared.loc[t]
-# 估计当天的FMCAR
-FMCAR[factor][t] = b * s / AR
+		# 每个因子循环
+		for factor in betas.columns:
+		# 每一天循环
+		for t in betas.index:
+		# 求beta与协方差之积的和，见公式
+		s = np.sum(betas.loc[t] * covariances[t][factor])
+		# 获取beta
+		b = betas.loc[t][factor]
+		# 获取主动风险
+		AR = active_risk_squared.loc[t]
+		# 估计当天的FMCAR
+		FMCAR[factor][t] = b * s / AR
 
 <p>了解历史数据中组合对各个因子的暴露程度是很有趣的，但只有将它用在对未来预测上时，它才有用武之地。但我们不是总能够放心地认为未来的情况与现在相同，由于随时间会变化，对风险暴露程度取平均值也很容易出现问题。我们可以给均值加上一个置信区间，但只有当其分布是正态分布或者表现很稳健才行。我们来看看Jarque-Bera测验的结果。</p>
 
-from statsmodels.stats.stattools import jarque_bera
-_, pvalue1, _, _ = jarque_bera(FMCAR['F1'].dropna().values)
-_, pvalue2, _, _ = jarque_bera(FMCAR['F2'].dropna().values)
+		from statsmodels.stats.stattools import jarque_bera
+		_, pvalue1, _, _ = jarque_bera(FMCAR['F1'].dropna().values)
+		_, pvalue2, _, _ = jarque_bera(FMCAR['F2'].dropna().values)
 
-<p>print('p-value F1_FMCAR is normally distributed', pvalue1)
-print('p-value F2_FMCAR is normally distributed', pvalue2)
-p-value F1_FMCAR is normally distributed 4.05960522776e-08
-p-value F2_FMCAR is normally distributed 0.000299975153613
-p_value显示我们可以显著的拒绝其为正态分布，可见对于未来这些因素会导致多少风险暴露是很难估计的，所以在使用这些统计模型去估计风险暴露并以此为依据来对冲是需要万分小心的。</p>
+		<p>print('p-value F1_FMCAR is normally distributed', pvalue1)
+		print('p-value F2_FMCAR is normally distributed', pvalue2)
+		p-value F1_FMCAR is normally distributed 4.05960522776e-08
+		p-value F2_FMCAR is normally distributed 0.000299975153613
+<p>p_value显示我们可以显著的拒绝其为正态分布，可见对于未来这些因素会导致多少风险暴露是很难估计的，所以在使用这些统计模型去估计风险暴露并以此为依据来对冲是需要万分小心的。</p>
 
 ## 后记
 
