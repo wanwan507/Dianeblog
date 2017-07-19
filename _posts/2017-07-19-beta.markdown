@@ -72,7 +72,7 @@ Y_{portfolio}=α+βX_{hs300}
 本文通过具体案例来了解如何做到市场风险对冲的，我们使用贵州茅台和基准沪深300来构建我们的投资组合，将沪深300的权重设为-β（由于持有基准空头头寸）。</p>
 
 ##代码
-'''
+```
 		# 得到过去一年得到的alpha 和beta值
 		start_date = '2014-01-01'
 		end_date = '2015-01-01'
@@ -132,7 +132,7 @@ Y_{portfolio}=α+βX_{hs300}
 		Portfolio Out of Sample:
 		alpha: 0.000203662008879
 		beta: 0.193618313006
-'''
+```
 
 <p>从上图可以看出，对冲后的收益降低了，但波动性也降低了。历史估计出的贝塔值在样本外的一年中是有效的，将资产的贝塔值0.673通过对冲降低到了0.193，也就是说降低了2/3，这样的对冲效果是比较明显的，而且也反映出历史的贝塔值是有效的，当然，要做到更好的效果，可以采取滚动估计贝塔的方法。</p>
 <p>市场中性策略是指同时构建多头和空头头寸以对冲市场风险，在市场不论上涨或者下跌的环境下均能获得稳定收益的一种投资策略，市场中性策略主要依据统计套利的量化分析。</p>
@@ -171,7 +171,7 @@ FMCAR_{j}=\frac{bj\sum_{i=1}^{k}{b_{i}cov(F_{j},F_{i})}}{(Active Risk)^2}
 <p>bj表示组合对因子j的风险暴露,bi表示组合对因子i的风险暴露,K表示一共K个因子。FMCARj这项指标这告诉我们，假设其他条件不变，暴露在因子j下我们增加了多少风险。</p>
 
 <p>下面我们运用多因素模型和线性回归工具来计算某只股票的回报率相对于这些因子的风险暴露程度。我们以某个资产组合的主动收益作为被解释变量，对因子做回归，一个因子对主动收益贡献越大，那么这个资产组合的主动收益对于该因子的暴露程度也越高。</p>
-'''
+```
 	# 我们以5只股票的组合（portfolio）举例
 	instruments = D.instruments()[:5]
 	Stock_matrix = D.history_data(instruments,start_date,end_date,fields=['close'])
@@ -211,9 +211,9 @@ FMCAR_{j}=\frac{bj\sum_{i=1}^{k}{b_{i}cov(F_{j},F_{i})}}{(Active Risk)^2}
 	print('HML Risk Contribution:', fmcar2)
 	SMB Risk Contribution: 0.145330519205
 	HML Risk Contribution: 0.0321851978612
-'''
+```
 <p>余下的风险可以归结于一些特有的风险因素，即我们没有加入模型的因子或者资产组合本身独有的某种风险。 通常我们会关注一下对这些因子的风险暴露随时间如何变化。让我们rolling一下～</p>
-'''
+```
 		# 计算滚动的beta
 		model = pd.stats.ols.MovingOLS(y = df['R'], x=df[['F1', 'F2']], 
 		window_type='rolling', 
@@ -222,9 +222,9 @@ FMCAR_{j}=\frac{bj\sum_{i=1}^{k}{b_{i}cov(F_{j},F_{i})}}{(Active Risk)^2}
 		rolling_parameter_estimates.plot()
 		plt.title('Computed Betas');
 		plt.legend(['F1 Beta', 'F2 Beta', 'Intercept']);
-'''
+```
 现在我们来看看FMCAR是如何随时间变化的
-'''
+```
 		# 计算方差协方差
 		# 去除有缺省值的日期，从有实际有效值的日期开始
 		covariances = pd.rolling_cov(df[['F1', 'F2']], window=100)[99:]
@@ -248,9 +248,9 @@ FMCAR_{j}=\frac{bj\sum_{i=1}^{k}{b_{i}cov(F_{j},F_{i})}}{(Active Risk)^2}
 		AR = active_risk_squared.loc[t]
 		# 估计当天的FMCAR
 		FMCAR[factor][t] = b * s / AR
-'''
+```
 <p>了解历史数据中组合对各个因子的暴露程度是很有趣的，但只有将它用在对未来预测上时，它才有用武之地。但我们不是总能够放心地认为未来的情况与现在相同，由于随时间会变化，对风险暴露程度取平均值也很容易出现问题。我们可以给均值加上一个置信区间，但只有当其分布是正态分布或者表现很稳健才行。我们来看看Jarque-Bera测验的结果。</p>
-'''
+```
 		from statsmodels.stats.stattools import jarque_bera
 		_, pvalue1, _, _ = jarque_bera(FMCAR['F1'].dropna().values)
 		_, pvalue2, _, _ = jarque_bera(FMCAR['F2'].dropna().values)
@@ -259,7 +259,7 @@ FMCAR_{j}=\frac{bj\sum_{i=1}^{k}{b_{i}cov(F_{j},F_{i})}}{(Active Risk)^2}
 		print('p-value F2_FMCAR is normally distributed', pvalue2)
 		p-value F1_FMCAR is normally distributed 4.05960522776e-08
 		p-value F2_FMCAR is normally distributed 0.000299975153613
-'''
+```
 <p>p_value显示我们可以显著的拒绝其为正态分布，可见对于未来这些因素会导致多少风险暴露是很难估计的，所以在使用这些统计模型去估计风险暴露并以此为依据来对冲是需要万分小心的。</p>
 
 ## 后记
