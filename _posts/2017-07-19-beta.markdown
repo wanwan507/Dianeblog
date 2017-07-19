@@ -26,10 +26,9 @@ tags:
 Y=α+β_{1}X_{1}+β_{2}X_{2}+...+β_{n}X_{n}
 \end{align}
 </p>
-<p>
 <blockquote>什么是beta?</blockquote>
 
-<p>一项资产的beta是该资产收益率与其他资产收益率通过上述模型回归拟合的β。比如，我们用回归模型
+<p>一项资产的beta是该资产收益率与其他资产收益率通过上述模型回归拟合的β。比如，我们用回归模型</p>
 <p>
 \begin{align}\notag Y_{gzmt}=α+βX_{benchmark}Y_{gzmt}=α+βX_{benchmark}
 \end{align}
@@ -39,7 +38,7 @@ Y=α+β_{1}X_{1}+β_{2}X_{2}+...+β_{n}X_{n}
 Y_{gzmt}=α+β_{1}X_{benchmark}+β_{2}X_{wly}Y_{gzmt}=α+β_{1}X_{benchmark}+β_{2}X_{wly}
 \end{align}
 </p>
-那么就会出现两个beta,一个是贵州茅台对沪深300的风险暴露，一个是贵州茅台对五粮液的风险暴露。
+<p>那么就会出现两个beta,一个是贵州茅台对沪深300的风险暴露，一个是贵州茅台对五粮液的风险暴露。
 
 通常而言，betabeta更多地指该资产相对于基准指数的风险暴露，即只相对于市场基准的一元线性回归所得到的回归系数。</p>
 
@@ -47,7 +46,7 @@ Y_{gzmt}=α+β_{1}X_{benchmark}+β_{2}X_{wly}Y_{gzmt}=α+β_{1}X_{benchmark}+β_
 <blockqoute>
 什么是对冲?
 </blockquote>
-<p>如果我们确定我们的投资组合的回报与市场的关系如下面公式所示：
+<p>如果我们确定我们的投资组合的回报与市场的关系如下面公式所示：</p>
 <p>
 \begin{align}\notag
 Y_{portfolio}=α+βX_{hs300}
