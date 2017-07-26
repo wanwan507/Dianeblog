@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="关于深度学习与量化交易、黑客与画家 | 高冰洁，Deep Learning & Quantitive Analysis，Nature Language Processing，Machine Learning | 这里是 @Diane冰洁 的个人博客，与你一起发现更大的世界。">
+    <meta name="keyword"  content="冰洁, Diane冰洁, Diane, Trader, Bingjie, @bingjie, 冰洁的博客, Bingjie Blog, 博客, 个人网站, 互联网, 人工智能, 深度学习, 自然语言处理, 量化投资, 风险对冲, 一个向往远方的小白">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>PYTHON多进程总结 - 冰洁的博客 | Bingjie Blog</title>
+
+    <link rel="canonical" href="http://0.0.0.0:4000/2017/07/17/mulitiporcess/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="http://cdn.staticfile.org/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Bingjie Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/about/">About</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/portfolio/">Portfolio</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/tags/">Tags</a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    var __HuxNav__ = {
+        close: function(){
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        },
+        open: function(){
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+
+    // Bind Event
+    $toggle.addEventListener('click', function(e){
+        if ($navbar.className.indexOf('in') > 0) {
+            __HuxNav__.close()
+        }else{
+            __HuxNav__.open()
+        }
+    })
+
+    /**
+     * Since Fastclick is used to delegate 'touchstart' globally
+     * to hack 300ms delay in iOS by performing a fake 'click',
+     * Using 'e.stopPropagation' to stop 'touchstart' event from 
+     * $toggle/$collapse will break global delegation.
+     * 
+     * Instead, we use a 'e.target' filter to prevent handler
+     * added to document close HuxNav.  
+     *
+     * Also, we use 'click' instead of 'touchstart' as compromise
+     */
+    document.addEventListener('click', function(e){
+        if(e.target == $toggle) return;
+        if(e.target.className == 'icon-bar') return;
+        __HuxNav__.close();
+    })
+</script>
+
+
+    <!-- Image to hack wechat -->
+<!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="/img/post-bg-js-module.jpg" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/post-bg-js-module.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                    </div>
+                    <h1>PYTHON多进程总结</h1>
+                    
+                    
+                    <h2 class="subheading">python效率提高的多种方法</h2>
+                    
+                    <span class="meta">Posted by Diane on July 17, 2017</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+				<h2 id="前言">前言</h2>
+
+<p><a href="#build">这是一个简单而又痛苦的开始…</a></p>
+
+<p>继续总结python多进程的内容。</p>
+
+<p id="build"></p>
+<hr />
+
+<p>######正文
+<br />
+由于GIL的原因，在python中涉及到多线程处理问题都需要使用多进程。
+<br />
+Unix/Linux操作系统提供了一个fork()系统调用，它非常特殊。普通的函数调用，调用一次，返回一次，但是fork()调用一次，返回两次，因为操作系统自动把当前进程（称为父进程）复制了一份（称为子进程），然后，分别在父进程和子进程内返回。
+<br />
+子进程永远返回0，而父进程返回子进程的ID。这样做的理由是，一个父进程可以fork出很多子进程，所以，父进程要记下每个子进程的ID，而子进程只需要调用getppid()就可以拿到父进程的ID。
+<br />
+Python的os模块封装了常见的系统调用，其中就包括fork，可以在Python程序中轻松创建子进程。
+<br />
+由于Windows没有fork调用，上面的代码在Windows上无法运行。由于Mac系统是基于BSD（Unix的一种）内核，所以，在Mac下运行是没有问题的，推荐大家用Mac学Python！
+<br />
+有了fork调用，一个进程在接到新任务时就可以复制出一个子进程来处理新任务，常见的Apache服务器就是由父进程监听端口，每当有新的http请求时，就fork出子进程来处理新的http请求。
+<br />
+如果你打算编写多进程的服务程序，Unix/Linux无疑是正确的选择。由于Windows没有fork调用，难道在Windows上无法用Python编写多进程的程序？<br /></p>
+
+<p>由于Python是跨平台的，自然也应该提供一个跨平台的多进程支持。multiprocessing模块就是跨平台版本的多进程模块。
+<br />
+创建子进程时，只需要传入一个执行函数和函数的参数，创建一个Process实例，用start()方法启动，这样创建进程比fork()还要简单。join()方法可以等待子进程结束后再继续往下运行，通常用于进程间的同步。
+<br />
+如果要启动大量的子进程，可以用进程池的方式批量创建子进程。对Pool对象调用join()方法会等待所有子进程执行完毕，调用join()之前必须先调用close()，调用close()之后就不能继续添加新的Process了。
+<br />
+Process之间肯定是需要通信的，操作系统提供了很多机制来实现进程间的通信。Python的multiprocessing模块包装了底层的机制，提供了Queue、Pipes等多种方式来交换数据。
+<br />
+在Unix/Linux下，multiprocessing模块封装了fork()调用，使我们不需要关注fork()的细节。由于Windows没有fork调用，因此，multiprocessing需要“模拟”出fork的效果，父进程所有Python对象都必须通过pickle序列化再传到子进程去，所有，如果multiprocessing在Windows下调用失败了，要先考虑是不是pickle失败了。
+<br /></p>
+
+<p>######代码字段</p>
+
+<pre><code class="language-python">import multiprocessing
+import time
+
+def worker(interval):
+    n = 5
+    while n &gt; 0:
+        print("The time is {0}".format(time.ctime()))
+        time.sleep(interval)
+        n -= 1
+
+if __name__ == "__main__":
+    p = multiprocessing.Process(target = worker, args = (3,))
+    p.start()
+    print("p.pid:", p.pid)
+    print("p.name:", p.name)
+    print("p.is_alive:", p.is_alive())
+</code></pre>
+
+<pre><code>p.pid: 4548
+p.name: Process-1
+p.is_alive: True
+The time is Mon Jul 17 15:27:33 2017
+The time is Mon Jul 17 15:27:36 2017
+The time is Mon Jul 17 15:27:39 2017
+The time is Mon Jul 17 15:27:42 2017
+The time is Mon Jul 17 15:27:45 2017
+</code></pre>
+
+<pre><code class="language-python">import multiprocessing
+import time
+
+def worker_1(interval):
+    print("worker_1")
+    time.sleep(interval)
+    print("end worker_1")
+
+def worker_2(interval):
+    print("worker_2")
+    time.sleep(interval)
+    print("end worker_2")
+
+def worker_3(interval):
+    print("worker_3")
+    time.sleep(interval)
+    print("end worker_3")
+
+if __name__ == "__main__":
+    p1 = multiprocessing.Process(target = worker_1, args = (2,))
+    p2 = multiprocessing.Process(target = worker_2, args = (3,))
+    p3 = multiprocessing.Process(target = worker_3, args = (4,))
+
+    p1.start()
+    p2.start()
+    p3.start()
+
+    print("The number of CPU is:" + str(multiprocessing.cpu_count()))
+    for p in multiprocessing.active_children():
+        print("child   p.name:" + p.name + "\tp.id" + str(p.pid))
+    print("END!!!!!!!!!!!!!!!!!")
+</code></pre>
+
+<pre><code>The number of CPU is:4
+child   p.name:Process-4	p.id4560
+child   p.name:Process-3	p.id4559
+child   p.name:Process-2	p.id4558
+END!!!!!!!!!!!!!!!!!
+worker_2
+worker_1
+worker_3
+end worker_1
+end worker_2
+end worker_3
+</code></pre>
+
+<pre><code class="language-python">import multiprocessing
+import time
+
+class ClockProcess(multiprocessing.Process):
+    def __init__(self, interval):
+        multiprocessing.Process.__init__(self)
+        self.interval = interval
+
+    def run(self):
+        n = 5
+        while n &gt; 0:
+            print("the time is {0}".format(time.ctime()))
+            time.sleep(self.interval)
+            n -= 1
+
+if __name__ == '__main__':
+    p = ClockProcess(3)
+    p.start()
+</code></pre>
+
+<pre><code>the time is Mon Jul 17 15:29:14 2017
+the time is Mon Jul 17 15:29:17 2017
+the time is Mon Jul 17 15:29:20 2017
+the time is Mon Jul 17 15:29:23 2017
+the time is Mon Jul 17 15:29:26 2017
+</code></pre>
+
+<pre><code class="language-python">import multiprocessing
+import time
+
+def worker(interval):
+    print("work start:{0}".format(time.ctime()));
+    time.sleep(interval)
+    print("work end:{0}".format(time.ctime()));
+
+if __name__ == "__main__":
+    p = multiprocessing.Process(target = worker, args = (3,))
+    p.start()
+    print("end!")
+</code></pre>
+
+<pre><code>end!
+work start:Mon Jul 17 15:30:40 2017
+work end:Mon Jul 17 15:30:43 2017
+</code></pre>
+
+<pre><code class="language-python">import multiprocessing
+import time
+
+def worker(interval):
+    print("work start:{0}".format(time.ctime()));
+    time.sleep(interval)
+    print("work end:{0}".format(time.ctime()));
+
+if __name__ == "__main__":
+    p = multiprocessing.Process(target = worker, args = (3,))
+    p.daemon = True
+    p.start()
+    print("end!")
+</code></pre>
+
+<pre><code>end!
+work start:Mon Jul 17 15:31:36 2017
+work end:Mon Jul 17 15:31:39 2017
+</code></pre>
+
+<pre><code class="language-python">import multiprocessing
+import time
+
+def worker(interval):
+    print("work start:{0}".format(time.ctime()));
+    time.sleep(interval)
+    print("work end:{0}".format(time.ctime()));
+
+if __name__ == "__main__":
+    p = multiprocessing.Process(target = worker, args = (3,))
+    p.daemon = True
+    p.start()
+    p.join()
+    print("end!")
+</code></pre>
+
+<pre><code>work start:Mon Jul 17 15:33:05 2017
+work end:Mon Jul 17 15:33:09 2017
+end!
+</code></pre>
+
+<pre><code class="language-python">import multiprocessing
+import sys
+
+def worker_with(lock, f):
+    with lock:
+        fs = open(f, 'a+')
+        n = 10
+        while n &gt; 1:
+            fs.write("Lockd acquired via with\n")
+            n -= 1
+        fs.close()
+        
+def worker_no_with(lock, f):
+    lock.acquire()
+    try:
+        fs = open(f, 'a+')
+        n = 10
+        while n &gt; 1:
+            fs.write("Lock acquired directly\n")
+            n -= 1
+        fs.close()
+    finally:
+        lock.release()
+    
+if __name__ == "__main__":
+    lock = multiprocessing.Lock()
+    f = "file.txt"
+    w = multiprocessing.Process(target = worker_with, args=(lock, f))
+    nw = multiprocessing.Process(target = worker_no_with, args=(lock, f))
+    w.start()
+    nw.start()
+    print("end")
+</code></pre>
+
+<pre><code>end
+</code></pre>
+
+<pre><code class="language-python">import multiprocessing
+import time
+
+def worker(s, i):
+    s.acquire()
+    print(multiprocessing.current_process().name + "acquire");
+    time.sleep(i)
+    print(multiprocessing.current_process().name + "release\n");
+    s.release()
+
+if __name__ == "__main__":
+    s = multiprocessing.Semaphore(2)
+    for i in range(5):
+        p = multiprocessing.Process(target = worker, args=(s, i*2))
+        p.start()
+</code></pre>
+
+<pre><code>Process-11acquire
+Process-12acquire
+Process-11release
+
+Process-13acquire
+Process-12release
+
+Process-14acquire
+Process-13release
+
+Process-15acquire
+Process-14release
+
+Process-15release
+</code></pre>
+
+<pre><code class="language-python">import multiprocessing
+import time
+
+def wait_for_event(e):
+    print("wait_for_event: starting")
+    e.wait()
+    print("wairt_for_event: e.is_set()-&gt;" + str(e.is_set()))
+
+def wait_for_event_timeout(e, t):
+    print("wait_for_event_timeout:starting")
+    e.wait(t)
+    print("wait_for_event_timeout:e.is_set-&gt;" + str(e.is_set()))
+
+if __name__ == "__main__":
+    e = multiprocessing.Event()
+    w1 = multiprocessing.Process(name = "block",
+            target = wait_for_event,
+            args = (e,))
+
+    w2 = multiprocessing.Process(name = "non-block",
+            target = wait_for_event_timeout,
+            args = (e, 2))
+    w1.start()
+    w2.start()
+
+    time.sleep(3)
+
+    e.set()
+    print("main: event is set")
+</code></pre>
+
+<pre><code>wait_for_event: starting
+wait_for_event_timeout:starting
+wait_for_event_timeout:e.is_set-&gt;False
+wairt_for_event: e.is_set()-&gt;True
+main: event is set
+</code></pre>
+
+<pre><code class="language-python">import multiprocessing
+
+def writer_proc(q):      
+    try:         
+        q.put(1, block = False) 
+    except:         
+        pass   
+
+def reader_proc(q):      
+    try:         
+        print(q.get(block = False))
+    except:         
+        pass
+
+if __name__ == "__main__":
+    q = multiprocessing.Queue()
+    writer = multiprocessing.Process(target=writer_proc, args=(q,))  
+    writer.start()   
+
+    reader = multiprocessing.Process(target=reader_proc, args=(q,))  
+    reader.start()  
+
+    reader.join()  
+    writer.join()
+</code></pre>
+
+<pre><code>1
+</code></pre>
+
+<pre><code class="language-python">import multiprocessing
+import time
+
+def proc1(pipe):
+    while True:
+        for i in arrange(0,10000):
+            print("send: %s" %(i))
+            pipe.send(i)
+            time.sleep(1)
+
+def proc2(pipe):
+    while True:
+        print("proc2 rev:", pipe.recv())
+        time.sleep(1)
+
+def proc3(pipe):
+    while True:
+        print("PROC3 rev:", pipe.recv())
+        time.sleep(1)
+
+if __name__ == "__main__":
+    pipe = multiprocessing.Pipe()
+    p1 = multiprocessing.Process(target=proc1, args=(pipe[0],))
+    p2 = multiprocessing.Process(target=proc2, args=(pipe[1],))
+    #p3 = multiprocessing.Process(target=proc3, args=(pipe[1],))
+
+    p1.start()
+    p2.start()
+    #p3.start()
+
+    p1.join()
+    p2.join()
+    #p3.join()
+</code></pre>
+
+<pre><code class="language-python">import multiprocessing
+import time
+
+def func(msg):
+    print("msg:", msg)
+    time.sleep(3)
+    print("end")
+
+if __name__ == "__main__":
+    pool = multiprocessing.Pool(processes = 3)
+    for i in xrange(4):
+        msg = "hello %d" %(i)
+        pool.apply_async(func, (msg, ))   #维持执行的进程总数为processes，当一个进程执行完毕后会添加新的进程进去
+
+    print("Mark~ Mark~ Mark~~~~~~~~~~~~~~~~~~~~~~")
+    pool.close()
+    pool.join()   #调用join之前，先调用close函数，否则会出错。执行完close后不会有新的进程加入到pool,join函数等待所有子进程结束
+    print("Sub-process(es) done.")
+</code></pre>
+
+<pre><code class="language-python">import multiprocessing
+import time
+
+def func(msg):
+    print("msg:", msg)
+    time.sleep(3)
+    print("end")
+
+if __name__ == "__main__":
+    pool = multiprocessing.Pool(processes = 3)
+    for i in range(0,3):
+        msg = "hello %d" %(i)
+        pool.apply(func, (msg, ))   #维持执行的进程总数为processes，当一个进程执行完毕后会添加新的进程进去
+
+    print("Mark~ Mark~ Mark~~~~~~~~~~~~~~~~~~~~~~")
+    pool.close()
+    pool.join()   #调用join之前，先调用close函数，否则会出错。执行完close后不会有新的进程加入到pool,join函数等待所有子进程结束
+    print("Sub-process(es) done.")
+</code></pre>
+
+<pre><code>msg: hello 0
+end
+msg: hello 1
+end
+msg: hello 2
+end
+Mark~ Mark~ Mark~~~~~~~~~~~~~~~~~~~~~~
+Sub-process(es) done.
+</code></pre>
+
+<pre><code class="language-python">import multiprocessing
+import time
+
+def func(msg):
+    print("msg:", msg)
+    time.sleep(3)
+    print("end")
+    return "done" + msg
+
+if __name__ == "__main__":
+    pool = multiprocessing.Pool(processes=4)
+    result = []
+    for i in range(0,3):
+        msg = "hello %d" %(i)
+        result.append(pool.apply_async(func, (msg, )))
+    pool.close()
+    pool.join()
+    for res in result:
+        print(":::", res.get())
+    print("Sub-process(es) done.")
+</code></pre>
+
+<pre><code>msg: hello 1
+msg: hello 0
+msg: hello 2
+end
+end
+end
+::: donehello 0
+::: donehello 1
+::: donehello 2
+Sub-process(es) done.
+
+
+import multiprocessing
+import os, time, random
+
+def Lee():
+    print("\nRun task Lee-%s" %(os.getpid())) #os.getpid()获取当前的进程的ID
+    start = time.time()
+    time.sleep(random.random() * 10) #random.random()随机生成0-1之间的小数
+    end = time.time()
+    print('Task Lee, runs %0.2f seconds.' %(end - start))
+
+def Marlon():
+    print("\nRun task Marlon-%s" %(os.getpid()))
+    start = time.time()
+    time.sleep(random.random() * 40)
+    end=time.time()
+    print('Task Marlon runs %0.2f seconds.' %(end - start))
+
+def Allen():
+    print("\nRun task Allen-%s" %(os.getpid()))
+    start = time.time()
+    time.sleep(random.random() * 30)
+    end = time.time()
+    print('Task Allen runs %0.2f seconds.' %(end - start))
+
+def Frank():
+    print("\nRun task Frank-%s" %(os.getpid()))
+    start = time.time()
+    time.sleep(random.random() * 20)
+    end = time.time()
+    print('Task Frank runs %0.2f seconds.' %(end - start))
+        
+if __name__=='__main__':
+    function_list=  [Lee, Marlon, Allen, Frank] 
+    print("parent process %s" %(os.getpid()))
+
+pool=multiprocessing.Pool(4)
+for func in function_list:
+    pool.apply_async(func)     #Pool执行函数，apply执行函数,当有一个进程执行完毕后，会添加一个新的进程到pool中
+
+print('Waiting for all subprocesses done...')
+pool.close()
+pool.join()    #调用join之前，一定要先调用close() 函数，否则会出错, close()执行后不会有新的进程加入到pool,join函数等待素有子进程结束
+print('All subprocesses done.')
+</code></pre>
+
+<p>######后记</p>
+
+<p>python多进程的具体效果还是需要继续尝试。</p>
+
+
+                <hr>
+
+                
+                <!-- 多说 Share start -->
+                </style>
+                <div class="ds-share"
+                    style="text-align: right"
+                    data-thread-key="/2017/07/17/mulitiporcess"
+                    data-title="PYTHON多进程总结"
+                    data-url="http://0.0.0.0:4000/2017/07/17/mulitiporcess/"
+                    data-images="http://0.0.0.0:4000/img/post-bg-js-module.jpg"
+                    data-content="前言
+
+这是一个简单而又痛苦的开始…
+
+继续总结python多进程的内容。
+
+
+
+
+######正文
+
+由于GIL的原因，在python中涉及到多线程处理... | 冰洁的博客 | Bingjie Blog " >
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat flat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo flat" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban flat" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- 多说 Share end-->
+                
+
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2017/07/16/shadowbank/" data-toggle="tooltip" data-placement="top" title="何谓影子银行？">
+                        Previous<br>
+                        <span>何谓影子银行？</span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2017/07/19/beta/" data-toggle="tooltip" data-placement="top" title="Beta对冲">
+                        Next<br>
+                        <span>Beta对冲</span>
+                        </a>
+                    </li>
+                    
+                </ul>
+
+
+                
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread"
+                        data-thread-key="/2017/07/17/mulitiporcess"
+                        data-title="PYTHON多进程总结"
+                        data-url="http://0.0.0.0:4000/2017/07/17/mulitiporcess/" >
+                    </div>
+                </div>
+                <!-- 多说评论框 end -->
+                
+
+                
+
+            </div>
+
+    <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+                    
+                        <li><a href="http://lingyu.wang/">天镶的博客</a></li>
+                    
+                        <li><a href="http://hmqk1995.github.io">Luke的自留地</a></li>
+                    
+                        <li><a href="http://ebnbin.com/">Ebn's Blog</a></li>
+                    
+                        <li><a href="http://blog.smdcn.net">SmdCn's Blog</a></li>
+                    
+                        <li><a href="http://xieminis.me/">解旻的博客</a></li>
+                    
+                        <li><a href="http://dhong.co">DHong Say</a></li>
+                    
+                        <li><a href="http://ingf.github.io/">尹峰以为</a></li>
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    // dynamic User by Hux
+    var _user = 'huxblog';
+
+    // duoshuo comment query.
+    var duoshuoQuery = {short_name: _user };
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+                    
+
+                    <!-- add Weibo, Zhihu by Hux, add target = "_blank" to <a> by Hux -->
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/bingjie-gao">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/446101575@qq.com">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/Bingjie Gao">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://github.com/wanwan507">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Bingjie Blog 2017
+                    <br>
+                    Theme © <a href="http://mkxkx.top">Diane</a> |
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=huxpro&repo=huxpro.github.io&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js "></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+        hljs.initHighlightingOnLoad();
+    })
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+<!--fastClick.js -->
+<script>
+    async("http://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        // var $nav = document.querySelector("nav");
+        // if($nav) FastClick.attach($nav);
+
+        // global FastClick!!
+        FastClick.attach(document.body);    
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-49627206-1';
+    var _gaDomain = 'mkxkx.top';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = '4cc1f2d8f3067386cc5cdb626a202900';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

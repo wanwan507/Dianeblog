@@ -5,9 +5,1113 @@
     <description>关于深度学习与量化交易、黑客与画家 | 高冰洁，Deep Learning &amp; Quantitive Analysis，Nature Language Processing，Machine Learning | 这里是 @Diane冰洁 的个人博客，与你一起发现更大的世界。</description>
     <link>http://0.0.0.0:4000/</link>
     <atom:link href="http://0.0.0.0:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Fri, 14 Jul 2017 16:59:17 +0800</pubDate>
-    <lastBuildDate>Fri, 14 Jul 2017 16:59:17 +0800</lastBuildDate>
+    <pubDate>Thu, 27 Jul 2017 00:12:28 +0800</pubDate>
+    <lastBuildDate>Thu, 27 Jul 2017 00:12:28 +0800</lastBuildDate>
     <generator>Jekyll v3.5.0</generator>
+    
+      <item>
+        <title>金融数据智能分析平台</title>
+        <description>&lt;h2 id=&quot;前言&quot;&gt;前言&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;#build&quot;&gt;感冒依旧没有好…&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;总结一下实习期间搭建的一个金融数据智能分析平台&lt;/p&gt;
+
+&lt;p id=&quot;build&quot;&gt;&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;正文&quot;&gt;正文&lt;/h2&gt;
+&lt;script type=&quot;text/javascript&quot; src=&quot;http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default&quot;&gt;&lt;/script&gt;
+
+&lt;blockquote&gt;1.	服务器端：&lt;/blockquote&gt;
+&lt;li&gt;flask http://flask.pocoo.org/ &lt;/li&gt;
+&lt;pre&gt;&lt;code&gt;轻量级的Python Web框架
+&lt;/code&gt;&lt;/pre&gt;
+&lt;li&gt;pandas http://pandas.pydata.org/ &lt;/li&gt;
+&lt;pre&gt;&lt;code&gt;Python的数据结构和数据分析工具包，提供数据处理的Wrangling的功能
+&lt;/code&gt;&lt;/pre&gt;
+&lt;li&gt;sklearn http://scikit-learn.org/ &lt;/li&gt;
+&lt;pre&gt;&lt;code&gt;非常流行的Python机器学习包，依赖于numpy，scipy和matplotlib
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;blockquote&gt;2.	客户端:&lt;/blockquote&gt;
+&lt;li&gt;jquery&lt;/li&gt;
+&lt;pre&gt;&lt;code&gt;reactjs http://facebook.github.io/react/ 
+facebook开发的js UI框架，基于组件（component）而非mvc
+&lt;/code&gt;&lt;/pre&gt;
+&lt;li&gt;d3js https://d3js.org/ &lt;/li&gt;
+&lt;pre&gt;&lt;code&gt;数据驱动的DOM操纵库，可以创建丰富的数据可视化呈现。
+&lt;/code&gt;&lt;/pre&gt;
+&lt;li&gt;echarts http://www.oschina.net/p/echarts &lt;/li&gt;
+&lt;pre&gt;&lt;code&gt;百度开发的数据可视化库，基于canvas技术，功能丰富。实为中国开源项目的翘楚。
+&lt;/code&gt;&lt;/pre&gt;
+&lt;li&gt;bootstrap http://getbootstrap.com/ &lt;/li&gt;
+&lt;pre&gt;&lt;code&gt;twitter开发的前端框架，非常流行。
+&lt;/code&gt;&lt;/pre&gt;
+&lt;li&gt;jquery datatables  http://www.datatables.net/ &lt;/li&gt;
+&lt;pre&gt;&lt;code&gt;非常实用的基于jquery的表格控件
+&lt;/code&gt;&lt;/pre&gt;
+&lt;li&gt;bootstrap fielinput https://github.com/kartik-v/bootstrap-fileinput &lt;/li&gt;
+&lt;pre&gt;&lt;code&gt;HTML5文件上传控件
+&lt;/code&gt;&lt;/pre&gt;
+&lt;li&gt;papaparse https://github.com/mholt/PapaParse &lt;/li&gt;
+&lt;pre&gt;&lt;code&gt;CSV文件的JS解析
+&lt;/code&gt;&lt;/pre&gt;
+&lt;li&gt;requirejs http://www.requirejs.org/ &lt;/li&gt;
+&lt;pre&gt;&lt;code&gt;JS 依赖管理
+&lt;/code&gt;&lt;/pre&gt;
+&lt;li&gt;select2  https://select2.github.io/ &lt;/li&gt;
+&lt;pre&gt;&lt;code&gt;基于jquery的select控件
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;blockquote&gt;3.	开发构建工具&lt;/blockquote&gt;
+&lt;li&gt;nodejs https://nodejs.org/en/ &lt;/li&gt;
+&lt;li&gt;babel https://babeljs.io/ &lt;/li&gt;
+&lt;p&gt;javascript的编译器，支持把ES6的代码转换成浏览器可执行的代码，这里主要是为了支持reactjs使用的jsx的编译。运行financial_dataplatform非常简单，下载github上的code后，建议安装anaconda2，所有的Python2.7依赖就都准备好了，进入financial_dataplatform/package目录，运行：python main.py
+以下步骤在只有js源文件而没有lib文件夹情况下才需要进行，而github中含有所有需要的文件，所以下述命令都不需要进行。&lt;/p&gt;
+&lt;p&gt;在只有js文件夹的情况下，因为react的js需要编译，需要运行如下的命令用babel进行js的转码才能运行，具体命令如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;## install node first&amp;lt;/br&amp;gt;
+## cd package/static&amp;lt;/br&amp;gt;
+npm install -g babel-cli&amp;lt;/br&amp;gt;
+npm install babel-preset-es2015 --save&amp;lt;/br&amp;gt;
+npm install babel-preset-react --save&amp;lt;/br&amp;gt;
+babel --presets es2015,react --watch js/ --out-dir lib/&amp;lt;/br&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;大家也可以参考package/static/package.json了解需要的依赖。有时间需要集成一个更简单的build脚本来做这些事情。生成的JS文件在lib目录下。当修改了js／文件夹下的js文件之后也需要执行上一条babel命令完成转码，然后在浏览器中键入 localhost:5000启动客户端。&lt;/p&gt;
+
+&lt;blockquote&gt;4.	接下来介绍两部分功能：&lt;/blockquote&gt;
+&lt;p&gt;数据上传用到了file input控件，数据表用了datatable控件。为了方便CSV文件直接存贮在本地文件系统中。后台用pandas对csv文件进行处理。前台用Rest API读取csv文件，然后用papaparse解析后，展现在数据表中。更好的做法是在后台用Python对CSV文件作解析。注意这里对上传的CSV文件有严格的要求，必须有首行的header，末尾不能有空行。&lt;/p&gt;
+&lt;p&gt;有了数据后，就可以开始做分析了。首先我们看看可视化的分析。点击菜单Analysis／Visualization。可视化这一块的主要工作是从CSV的表结构数据，根据数据绑定，变形到echart的数据结构。因为echart并没有一个统一的数据模型，所以每一个类型的图表都需要有对应的数据变形的逻辑 。（代码 package/static/js/visualization ）现在主要的做了Pie，Bar，Line，Treemap，Scatter， Area这几种chart。现在用下来感觉echart优缺点都很明显，他提供的辅助功能很好，可以方便的增加辅助线，note，存贮为图形等。但是由于缺乏统一的数据模型扩展起来比较麻烦，接下来试用一下plotly，当然highchart是非常成熟的图表库。&lt;/p&gt;
+&lt;p&gt;除了基于可视化的分析功能，还有机器学习的功能。分类的算法可以使用KNN，Bayes和SVM。聚类算法现在实现了Kmeans。回归实现了线性回归和逻辑回归。&lt;/p&gt;
+
+&lt;blockquote&gt;5.	接下来可以进一步实现的功能：&lt;/blockquote&gt;
+&lt;li&gt;数据源&lt;/li&gt;
+&lt;p&gt;现在的数据源只有CSV文件和数据库，可以考虑更多的数据源支持，例如数据仓库，REST调用，流等等。&lt;/p&gt;
+&lt;li&gt;数据模型&lt;/li&gt;
+&lt;p&gt;现在的数据模型比较简单，就是pandas的dataframe或者一个简单的cvs的表结构。可以考虑引入数据库。另外还需要增加对层级数据（hierachical）的支持&lt;/p&gt;
+&lt;li&gt;数据变形&lt;/li&gt;
+&lt;p&gt;数据变形是数据分析的必要准备工作。业内有很多专注于数据准备的产品，例如paxata,trifacta。现有的平台没有任何的数据变形和准备的功能，其实pandas有非常丰富的data wrangling的功能，我希望能在这之上包装一个data wrangling的DSL，可以让用户快速的进行数据准备。&lt;/p&gt;
+&lt;li&gt;可视化库&lt;/li&gt;
+&lt;p&gt;Baidu的echart是非常优秀的可视化库，可是用于数据探索时，还不够好。希望能有一套类似ggplot的前端可视化库来使用。另外地图功能和层级化的图表也是数据分析常见的功能。&lt;/p&gt;
+&lt;li&gt;仪表盘功能&lt;/li&gt;
+&lt;p&gt;这个没有仪表盘功能，这个功能是数据分析软件的标配。pyxley似乎是个不错的选择，也和dataplay的架构一致（python，reactjs）。&lt;/p&gt;
+&lt;li&gt;机器学习和预测&lt;/li&gt;
+&lt;p&gt;现在实现了最简单的一些机器学习和深度学习的算法，我觉得方向应该是面向用户，变得更简单，用户只给出简单的选项，例如要预测的目标属性，和用于预测的属性，然后自动的选择算法。另外需要更方便的对算法进行扩展。未来可以进一步拓展GPU的支持。&lt;/p&gt;
+
+&lt;h2 id=&quot;后记&quot;&gt;后记&lt;/h2&gt;
+
+&lt;p&gt;下一篇介绍系统的数据库分析平台搭建方式。&lt;/p&gt;
+</description>
+        <pubDate>Wed, 26 Jul 2017 00:00:00 +0800</pubDate>
+        <link>http://0.0.0.0:4000/2017/07/26/financial-dataplatform/</link>
+        <guid isPermaLink="true">http://0.0.0.0:4000/2017/07/26/financial-dataplatform/</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>Beta对冲</title>
+        <description>&lt;h2 id=&quot;前言&quot;&gt;前言&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;#build&quot;&gt;嗓子疼，快感冒了…&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;总结一下金融知识&lt;/p&gt;
+
+&lt;p id=&quot;build&quot;&gt;&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;正文&quot;&gt;正文&lt;/h2&gt;
+&lt;script type=&quot;text/javascript&quot; src=&quot;http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default&quot;&gt;&lt;/script&gt;
+
+&lt;p&gt;因子模型
+因子模型是通过其他若干项资产回报的线性组合来解释一项资产回报的一种方式，因子模型的一般形式是：&lt;/p&gt;
+&lt;p&gt;
+\begin{align}\notag 
+Y=α+β_{1}X_{1}+β_{2}X_{2}+...+β_{n}X_{n}
+\end{align}
+&lt;/p&gt;
+&lt;blockquote&gt;什么是beta?&lt;/blockquote&gt;
+
+&lt;p&gt;一项资产的beta是该资产收益率与其他资产收益率通过上述模型回归拟合的β。比如，我们用回归模型&lt;/p&gt;
+&lt;p&gt;
+\begin{align}\notag Y_{gzmt}=α+βX_{benchmark}Y_{gzmt}=α+βX_{benchmark}
+\end{align}
+&lt;/p&gt;
+&lt;p&gt;来描述贵州茅台收益率相对于沪深300回归的ββ值，如果我们使用模型&lt;/p&gt;
+&lt;p&gt;
+\begin{align}\notag
+Y_{gzmt}=α+β_{1}X_{benchmark}+β_{2}X_{wly}Y_{gzmt}=α+β_{1}X_{benchmark}+β_{2}X_{wly}
+\end{align}
+&lt;/p&gt;
+&lt;p&gt;那么就会出现两个beta,一个是贵州茅台对沪深300的风险暴露，一个是贵州茅台对五粮液的风险暴露。
+
+通常而言，betabeta更多地指该资产相对于基准指数的风险暴露，即只相对于市场基准的一元线性回归所得到的回归系数。&lt;/p&gt;
+
+&lt;blockqoute&gt;
+什么是对冲?
+&amp;lt;/blockquote&amp;gt;
+&lt;p&gt;如果我们确定我们的投资组合的回报与市场的关系如下面公式所示：&lt;/p&gt;
+&lt;p&gt;
+\begin{align}\notag
+Y_{portfolio}=α+βX_{hs300}
+\end{align}
+&lt;/p&gt;
+&lt;p&gt;
+\begin{align}\notag
+Y_{portfolio}=α+βX_{hs300}
+\end{align}
+&lt;/p&gt;
+&lt;p&gt;于是，我们可以建立沪深300空头头寸来对冲市场风险，对冲的市值为−βV,如果我们持有多头组合的市值是V。因为我们多头组合的收益为α+βXhs300α+βXhs300,沪深300对冲空头的收益为−βXhs300−βXhs300,于是我们最终的收益为α+βXhs300−βXhs300=α+βXhs300−βXhs300=α,于是我们的收益来源只有αα，而与市场系统风险没有关系。
+&lt;/p&gt;
+
+&lt;blockquote&gt;风险暴露&lt;/blockquote&gt;
+
+&lt;p&gt;一般而言，beta描述的是持有资产所承担的系统风险敞口这一概念。 如果一项资产相对沪深300基准指数具有较高的β暴露水平，那么在市场上涨时，它的表现将会很好，当市场下跌时，它表现很差。 高ββ对应于高系统风险（高市场风险），意味着你的投资更具有波动性。市场中性策略对于拥有大量现金池的机构（银行、保险、公募基金等）最具吸引力。&lt;/p&gt;
+
+&lt;blockquote&gt;风险管理&lt;/blockquote&gt;
+
+&lt;p&gt;减少因子风险暴露的过程称为风险管理。对冲是在实践中进行风险管理的最佳方式之一。
+
+本文通过具体案例来了解如何做到市场风险对冲的，我们使用贵州茅台和基准沪深300来构建我们的投资组合，将沪深300的权重设为-β（由于持有基准空头头寸）。&lt;/p&gt;
+
+```
+	# 得到过去一年得到的alpha 和beta值
+	start_date = '2014-01-01'
+	end_date = '2015-01-01'
+	asset = D.history_data('600519.SHA',start_date,end_date,fields=['close']).set_index('date')['close']
+	benchmark = D.history_data('000300.SHA',start_date,end_date,fields=['close']).set_index('date')['close']
+	r_a = asset.pct_change()[1:]
+	r_b = benchmark.pct_change()[1:]
+	X = r_b.values
+	Y = r_a.values
+	historical_alpha, historical_beta = linreg(X,Y)
+	print('Asset Historical Estimate:')
+	print('alpha: ' + str(historical_alpha))
+	print('beta: ' + str(historical_beta))
+
+	# 获取下一年的数据:
+	start_date = '2015-01-01'
+	end_date = '2015-06-01'
+	asset = D.history_data('600519.SHA',start_date,end_date,fields=['close']).set_index('date')['close']
+	benchmark = D.history_data('000300.SHA',start_date,end_date,fields=['close']).set_index('date')['close']
+	asset.name = '600519.SHA'
+	benchmark.name = '000300.SHA'
+	# 重复前面的过程来计算alpha 和beta值
+	r_a = asset.pct_change()[1:]
+	r_b = benchmark.pct_change()[1:]
+	X = r_b.values
+	Y = r_a.values
+	alpha, beta = linreg(X,Y)
+	print('Asset Out of Sample Estimate:')
+	print('alpha: ' + str(alpha))
+	print('beta: ' + str(beta))
+
+	# 构建对冲投资组合来计算alpha、beta
+	portfolio = -1*historical_beta*r_b + r_a
+	P = portfolio.values
+	alpha, beta = linreg(X,P)
+	print('Portfolio Out of Sample:')
+	print ('alpha: ' + str(alpha))
+	print ('beta: ' + str(beta))
+
+
+	# 绘制图形
+	portfolio.name = &quot;600519.SHA + Hedge&quot;
+	portfolio.plot(alpha=0.9,figsize=[9,6])
+	r_a.plot(alpha=0.5);
+	r_b.plot(alpha=0.5)
+	plt.ylabel(&quot;Daily Return&quot;)
+	plt.legend();
+
+
+
+	Asset Historical Estimate:
+	alpha: 0.00116253939056
+	beta: 0.672934653004
+	Asset Out of Sample Estimate:
+	alpha: 0.00020366206079
+	beta: 0.866552969103
+	Portfolio Out of Sample:
+	alpha: 0.000203662008879
+	beta: 0.193618313006
+```
+
+&lt;p&gt;从上图可以看出，对冲后的收益降低了，但波动性也降低了。历史估计出的贝塔值在样本外的一年中是有效的，将资产的贝塔值0.673通过对冲降低到了0.193，也就是说降低了2/3，这样的对冲效果是比较明显的，而且也反映出历史的贝塔值是有效的，当然，要做到更好的效果，可以采取滚动估计贝塔的方法。&lt;/p&gt;
+&lt;p&gt;市场中性策略是指同时构建多头和空头头寸以对冲市场风险，在市场不论上涨或者下跌的环境下均能获得稳定收益的一种投资策略，市场中性策略主要依据统计套利的量化分析。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;(1)阿尔法套利：做多具有阿尔法值的证券产品，做空指数期货，实现回避系统性风险下的超越市场指数的阿尔法收益。&lt;/li&gt;
+
+&lt;li&gt;(2)贝塔套利：期指市场上做空，在股票市场上构建拟合300指数的成份股，赚取其中的价差，这种被动型的套利。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;什么是市盈率&lt;/blockquote&gt;
+&lt;p&gt;市盈率是衡量股价高低和企业盈利能力的一个重要指标。由于市盈率把股价和企业盈利能力结合起来，其水平高低更真实地反映了股票价格的高低。例如，股价同为50元的两只股票，其每股收益分别为5元和1元，则其市盈率分别是10倍和50倍，也就是说具当前的实际价格水平相差5倍。若企业盈利能力不变，这说明投资者以同样50元价格购买的两种股票，要分别在10年和50年以后才能从企业盈利中收回投资。因此市盈率倍数可以简单地理解为要收回投资，最少需要多少年，很明显市盈率越低，越具有吸引力。&lt;/p&gt;
+
+&lt;p&gt;通常，此分析是基于历史数据，而对历史风险暴露的估计可能会影响未来的风险暴露。 因此，计算因子风险暴露是不够的。 你必须对风险暴露保持信心，并明白对风险暴露的建模是否合理。&lt;/p&gt;
+
+&lt;p&gt;运用多因子模型计算因子风险暴露
+,我们可以运用多因子模型分析一个组合中风险和收益的来源，多因子模型对收益的分解如下：&lt;p&gt;
+
+&lt;p&gt;
+\begin{align}\notag
+R_{i}=a_{i}+b_{i1}F_{1}+b_{i2}F_{2}+...+b_{iK}F_{K}+ϵ_{i}
+\end{align}
+
+&lt;/p&gt;
+
+&lt;p&gt;通过对历史收益率进行建模，我们可以分析出收益中有多少是来自因子收益率，有多少来自资产特质波动（ϵϵ）。 我们也可以研究投资组合所面临的风险来源，即投资组合的因子暴露。&lt;/p&gt;
+
+&lt;p&gt;在风险分析中，我们经常对主动回报（相对于基准的回报）和主动风险（主动回报的标准差，也称为跟踪误差或跟踪风险）进行建模。&lt;/p&gt;
+
+&lt;p&gt;例如，我们可计算到一个因子对主动风险的边际贡献——FMCAR。 对于因子jj，表示为：&lt;/p&gt;
+
+&lt;p&gt;
+\begin{align}\notag
+FMCAR_{j}=\frac{bj\sum_{i=1}^{k}{b_{i}cov(F_{j},F_{i})}}{(Active Risk)^2}
+\end{align}
+&lt;/p&gt;
+&lt;p&gt;bj表示组合对因子j的风险暴露,bi表示组合对因子i的风险暴露,K表示一共K个因子。FMCARj这项指标这告诉我们，假设其他条件不变，暴露在因子j下我们增加了多少风险。&lt;/p&gt;
+
+&lt;p&gt;下面我们运用多因素模型和线性回归工具来计算某只股票的回报率相对于这些因子的风险暴露程度。我们以某个资产组合的主动收益作为被解释变量，对因子做回归，一个因子对主动收益贡献越大，那么这个资产组合的主动收益对于该因子的暴露程度也越高。&lt;/p&gt;
+```
+	# 我们以5只股票的组合（portfolio）举例
+	instruments = D.instruments()[:5]
+	Stock_matrix = D.history_data(instruments,start_date,end_date,fields=['close'])
+	Stock_matrix = pd.pivot_table(Stock_matrix,values='close',index=['date'],columns=['instrument'])
+	portfolio = Stock_matrix.pct_change()[1:]
+	# 组合的每日收益率（等权重组合）
+	R = np.mean(portfolio, axis=1)
+	# 基准收益率
+	bench = D.history_data('000300.SHA',start_date, end_date, fields=['close']).set_index('date')['close'].pct_change()[1:]
+	# 主动收益率
+	active = R - bench
+	# 建立一个常数项，为下文回归做准备
+	constant = pd.TimeSeries(np.ones(len(active.index)), index=active.index)
+	df = pd.DataFrame({'R': active,
+	'F1': SMB,
+	'F2': HML,
+	'Constant': constant})
+	# 删除含有缺失值的行
+	df = df.dropna()
+	#线性回归并获取回归系数
+	b1, b2 = regression.linear_model.OLS(df['R'], df[['F1', 'F2']]).fit().params
+	# 因子对于主动收益的敏感性（即因子暴露）
+	print('Sensitivities of active returns to factors:\nSMB: %f\nHML: %f' %  (b1, b2))
+	Sensitivities of active returns to factors:
+	SMB: 0.430179
+	HML: -0.104828
+	利用前文给的公式，计算因子对主动收益风险平方的边际贡献（factors' marginal contributions to active risk squared，FMCAR ）
+
+	# 计算因子风险贡献
+	F1 = df['F1']
+	F2 = df['F2']
+	cov = np.cov(F1, F2)
+	ar_squared = (active.std())**2
+	fmcar1 = (b1*(b2*cov[0,1] + b1*cov[0,0]))/ar_squared
+	fmcar2 = (b2*(b1*cov[0,1] + b2*cov[1,1]))/ar_squared
+	print('SMB Risk Contribution:', fmcar1)
+	print('HML Risk Contribution:', fmcar2)
+	SMB Risk Contribution: 0.145330519205
+	HML Risk Contribution: 0.0321851978612
+```
+&lt;p&gt;余下的风险可以归结于一些特有的风险因素，即我们没有加入模型的因子或者资产组合本身独有的某种风险。 通常我们会关注一下对这些因子的风险暴露随时间如何变化。让我们rolling一下～&lt;/p&gt;
+```
+	# 计算滚动的beta
+	model = pd.stats.ols.MovingOLS(y = df['R'], x=df[['F1', 'F2']], 
+	window_type='rolling', 
+	window=100)   
+	rolling_parameter_estimates = model.beta
+	rolling_parameter_estimates.plot()
+	plt.title('Computed Betas');
+	plt.legend(['F1 Beta', 'F2 Beta', 'Intercept']);
+```
+现在我们来看看FMCAR是如何随时间变化的
+```
+	# 计算方差协方差
+	# 去除有缺省值的日期，从有实际有效值的日期开始
+	covariances = pd.rolling_cov(df[['F1', 'F2']], window=100)[99:]
+	# 计算主动风险
+	active_risk_squared = pd.rolling_std(active, window = 100)[99:]**2
+	# 计算beta
+	betas = rolling_parameter_estimates[['F1', 'F2']]
+
+	# 新建一个空的dataframe
+	FMCAR = pd.DataFrame(index=betas.index, columns=betas.columns)
+
+	# 每个因子循环
+	for factor in betas.columns:
+	# 每一天循环
+	for t in betas.index:
+	# 求beta与协方差之积的和，见公式
+	s = np.sum(betas.loc[t] * covariances[t][factor])
+	# 获取beta
+	b = betas.loc[t][factor]
+	# 获取主动风险
+	AR = active_risk_squared.loc[t]
+	# 估计当天的FMCAR
+	FMCAR[factor][t] = b * s / AR
+```
+&lt;p&gt;了解历史数据中组合对各个因子的暴露程度是很有趣的，但只有将它用在对未来预测上时，它才有用武之地。但我们不是总能够放心地认为未来的情况与现在相同，由于随时间会变化，对风险暴露程度取平均值也很容易出现问题。我们可以给均值加上一个置信区间，但只有当其分布是正态分布或者表现很稳健才行。我们来看看Jarque-Bera测验的结果。&lt;/p&gt;
+```
+	from statsmodels.stats.stattools import jarque_bera
+	_, pvalue1, _, _ = jarque_bera(FMCAR['F1'].dropna().values)
+	_, pvalue2, _, _ = jarque_bera(FMCAR['F2'].dropna().values)
+
+	&lt;p&gt;print('p-value F1_FMCAR is normally distributed', pvalue1)
+	print('p-value F2_FMCAR is normally distributed', pvalue2)
+	p-value F1_FMCAR is normally distributed 4.05960522776e-08
+	p-value F2_FMCAR is normally distributed 0.000299975153613
+```
+&lt;p&gt;p_value显示我们可以显著的拒绝其为正态分布，可见对于未来这些因素会导致多少风险暴露是很难估计的，所以在使用这些统计模型去估计风险暴露并以此为依据来对冲是需要万分小心的。&lt;/p&gt;
+
+## 后记
+
+没有后记
+&lt;/p&gt;&lt;/p&gt;&lt;/p&gt;&lt;/blockqoute&gt;
+</description>
+        <pubDate>Wed, 19 Jul 2017 00:00:00 +0800</pubDate>
+        <link>http://0.0.0.0:4000/2017/07/19/beta/</link>
+        <guid isPermaLink="true">http://0.0.0.0:4000/2017/07/19/beta/</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>PYTHON多进程总结</title>
+        <description>&lt;h2 id=&quot;前言&quot;&gt;前言&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;#build&quot;&gt;这是一个简单而又痛苦的开始…&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;继续总结python多进程的内容。&lt;/p&gt;
+
+&lt;p id=&quot;build&quot;&gt;&lt;/p&gt;
+&lt;hr /&gt;
+
+&lt;p&gt;######正文
+&lt;br /&gt;
+由于GIL的原因，在python中涉及到多线程处理问题都需要使用多进程。
+&lt;br /&gt;
+Unix/Linux操作系统提供了一个fork()系统调用，它非常特殊。普通的函数调用，调用一次，返回一次，但是fork()调用一次，返回两次，因为操作系统自动把当前进程（称为父进程）复制了一份（称为子进程），然后，分别在父进程和子进程内返回。
+&lt;br /&gt;
+子进程永远返回0，而父进程返回子进程的ID。这样做的理由是，一个父进程可以fork出很多子进程，所以，父进程要记下每个子进程的ID，而子进程只需要调用getppid()就可以拿到父进程的ID。
+&lt;br /&gt;
+Python的os模块封装了常见的系统调用，其中就包括fork，可以在Python程序中轻松创建子进程。
+&lt;br /&gt;
+由于Windows没有fork调用，上面的代码在Windows上无法运行。由于Mac系统是基于BSD（Unix的一种）内核，所以，在Mac下运行是没有问题的，推荐大家用Mac学Python！
+&lt;br /&gt;
+有了fork调用，一个进程在接到新任务时就可以复制出一个子进程来处理新任务，常见的Apache服务器就是由父进程监听端口，每当有新的http请求时，就fork出子进程来处理新的http请求。
+&lt;br /&gt;
+如果你打算编写多进程的服务程序，Unix/Linux无疑是正确的选择。由于Windows没有fork调用，难道在Windows上无法用Python编写多进程的程序？&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;由于Python是跨平台的，自然也应该提供一个跨平台的多进程支持。multiprocessing模块就是跨平台版本的多进程模块。
+&lt;br /&gt;
+创建子进程时，只需要传入一个执行函数和函数的参数，创建一个Process实例，用start()方法启动，这样创建进程比fork()还要简单。join()方法可以等待子进程结束后再继续往下运行，通常用于进程间的同步。
+&lt;br /&gt;
+如果要启动大量的子进程，可以用进程池的方式批量创建子进程。对Pool对象调用join()方法会等待所有子进程执行完毕，调用join()之前必须先调用close()，调用close()之后就不能继续添加新的Process了。
+&lt;br /&gt;
+Process之间肯定是需要通信的，操作系统提供了很多机制来实现进程间的通信。Python的multiprocessing模块包装了底层的机制，提供了Queue、Pipes等多种方式来交换数据。
+&lt;br /&gt;
+在Unix/Linux下，multiprocessing模块封装了fork()调用，使我们不需要关注fork()的细节。由于Windows没有fork调用，因此，multiprocessing需要“模拟”出fork的效果，父进程所有Python对象都必须通过pickle序列化再传到子进程去，所有，如果multiprocessing在Windows下调用失败了，要先考虑是不是pickle失败了。
+&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;######代码字段&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-python&quot;&gt;import multiprocessing
+import time
+
+def worker(interval):
+    n = 5
+    while n &amp;gt; 0:
+        print(&quot;The time is {0}&quot;.format(time.ctime()))
+        time.sleep(interval)
+        n -= 1
+
+if __name__ == &quot;__main__&quot;:
+    p = multiprocessing.Process(target = worker, args = (3,))
+    p.start()
+    print(&quot;p.pid:&quot;, p.pid)
+    print(&quot;p.name:&quot;, p.name)
+    print(&quot;p.is_alive:&quot;, p.is_alive())
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;p.pid: 4548
+p.name: Process-1
+p.is_alive: True
+The time is Mon Jul 17 15:27:33 2017
+The time is Mon Jul 17 15:27:36 2017
+The time is Mon Jul 17 15:27:39 2017
+The time is Mon Jul 17 15:27:42 2017
+The time is Mon Jul 17 15:27:45 2017
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-python&quot;&gt;import multiprocessing
+import time
+
+def worker_1(interval):
+    print(&quot;worker_1&quot;)
+    time.sleep(interval)
+    print(&quot;end worker_1&quot;)
+
+def worker_2(interval):
+    print(&quot;worker_2&quot;)
+    time.sleep(interval)
+    print(&quot;end worker_2&quot;)
+
+def worker_3(interval):
+    print(&quot;worker_3&quot;)
+    time.sleep(interval)
+    print(&quot;end worker_3&quot;)
+
+if __name__ == &quot;__main__&quot;:
+    p1 = multiprocessing.Process(target = worker_1, args = (2,))
+    p2 = multiprocessing.Process(target = worker_2, args = (3,))
+    p3 = multiprocessing.Process(target = worker_3, args = (4,))
+
+    p1.start()
+    p2.start()
+    p3.start()
+
+    print(&quot;The number of CPU is:&quot; + str(multiprocessing.cpu_count()))
+    for p in multiprocessing.active_children():
+        print(&quot;child   p.name:&quot; + p.name + &quot;\tp.id&quot; + str(p.pid))
+    print(&quot;END!!!!!!!!!!!!!!!!!&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;The number of CPU is:4
+child   p.name:Process-4	p.id4560
+child   p.name:Process-3	p.id4559
+child   p.name:Process-2	p.id4558
+END!!!!!!!!!!!!!!!!!
+worker_2
+worker_1
+worker_3
+end worker_1
+end worker_2
+end worker_3
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-python&quot;&gt;import multiprocessing
+import time
+
+class ClockProcess(multiprocessing.Process):
+    def __init__(self, interval):
+        multiprocessing.Process.__init__(self)
+        self.interval = interval
+
+    def run(self):
+        n = 5
+        while n &amp;gt; 0:
+            print(&quot;the time is {0}&quot;.format(time.ctime()))
+            time.sleep(self.interval)
+            n -= 1
+
+if __name__ == '__main__':
+    p = ClockProcess(3)
+    p.start()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;the time is Mon Jul 17 15:29:14 2017
+the time is Mon Jul 17 15:29:17 2017
+the time is Mon Jul 17 15:29:20 2017
+the time is Mon Jul 17 15:29:23 2017
+the time is Mon Jul 17 15:29:26 2017
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-python&quot;&gt;import multiprocessing
+import time
+
+def worker(interval):
+    print(&quot;work start:{0}&quot;.format(time.ctime()));
+    time.sleep(interval)
+    print(&quot;work end:{0}&quot;.format(time.ctime()));
+
+if __name__ == &quot;__main__&quot;:
+    p = multiprocessing.Process(target = worker, args = (3,))
+    p.start()
+    print(&quot;end!&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;end!
+work start:Mon Jul 17 15:30:40 2017
+work end:Mon Jul 17 15:30:43 2017
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-python&quot;&gt;import multiprocessing
+import time
+
+def worker(interval):
+    print(&quot;work start:{0}&quot;.format(time.ctime()));
+    time.sleep(interval)
+    print(&quot;work end:{0}&quot;.format(time.ctime()));
+
+if __name__ == &quot;__main__&quot;:
+    p = multiprocessing.Process(target = worker, args = (3,))
+    p.daemon = True
+    p.start()
+    print(&quot;end!&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;end!
+work start:Mon Jul 17 15:31:36 2017
+work end:Mon Jul 17 15:31:39 2017
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-python&quot;&gt;import multiprocessing
+import time
+
+def worker(interval):
+    print(&quot;work start:{0}&quot;.format(time.ctime()));
+    time.sleep(interval)
+    print(&quot;work end:{0}&quot;.format(time.ctime()));
+
+if __name__ == &quot;__main__&quot;:
+    p = multiprocessing.Process(target = worker, args = (3,))
+    p.daemon = True
+    p.start()
+    p.join()
+    print(&quot;end!&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;work start:Mon Jul 17 15:33:05 2017
+work end:Mon Jul 17 15:33:09 2017
+end!
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-python&quot;&gt;import multiprocessing
+import sys
+
+def worker_with(lock, f):
+    with lock:
+        fs = open(f, 'a+')
+        n = 10
+        while n &amp;gt; 1:
+            fs.write(&quot;Lockd acquired via with\n&quot;)
+            n -= 1
+        fs.close()
+        
+def worker_no_with(lock, f):
+    lock.acquire()
+    try:
+        fs = open(f, 'a+')
+        n = 10
+        while n &amp;gt; 1:
+            fs.write(&quot;Lock acquired directly\n&quot;)
+            n -= 1
+        fs.close()
+    finally:
+        lock.release()
+    
+if __name__ == &quot;__main__&quot;:
+    lock = multiprocessing.Lock()
+    f = &quot;file.txt&quot;
+    w = multiprocessing.Process(target = worker_with, args=(lock, f))
+    nw = multiprocessing.Process(target = worker_no_with, args=(lock, f))
+    w.start()
+    nw.start()
+    print(&quot;end&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-python&quot;&gt;import multiprocessing
+import time
+
+def worker(s, i):
+    s.acquire()
+    print(multiprocessing.current_process().name + &quot;acquire&quot;);
+    time.sleep(i)
+    print(multiprocessing.current_process().name + &quot;release\n&quot;);
+    s.release()
+
+if __name__ == &quot;__main__&quot;:
+    s = multiprocessing.Semaphore(2)
+    for i in range(5):
+        p = multiprocessing.Process(target = worker, args=(s, i*2))
+        p.start()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;Process-11acquire
+Process-12acquire
+Process-11release
+
+Process-13acquire
+Process-12release
+
+Process-14acquire
+Process-13release
+
+Process-15acquire
+Process-14release
+
+Process-15release
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-python&quot;&gt;import multiprocessing
+import time
+
+def wait_for_event(e):
+    print(&quot;wait_for_event: starting&quot;)
+    e.wait()
+    print(&quot;wairt_for_event: e.is_set()-&amp;gt;&quot; + str(e.is_set()))
+
+def wait_for_event_timeout(e, t):
+    print(&quot;wait_for_event_timeout:starting&quot;)
+    e.wait(t)
+    print(&quot;wait_for_event_timeout:e.is_set-&amp;gt;&quot; + str(e.is_set()))
+
+if __name__ == &quot;__main__&quot;:
+    e = multiprocessing.Event()
+    w1 = multiprocessing.Process(name = &quot;block&quot;,
+            target = wait_for_event,
+            args = (e,))
+
+    w2 = multiprocessing.Process(name = &quot;non-block&quot;,
+            target = wait_for_event_timeout,
+            args = (e, 2))
+    w1.start()
+    w2.start()
+
+    time.sleep(3)
+
+    e.set()
+    print(&quot;main: event is set&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;wait_for_event: starting
+wait_for_event_timeout:starting
+wait_for_event_timeout:e.is_set-&amp;gt;False
+wairt_for_event: e.is_set()-&amp;gt;True
+main: event is set
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-python&quot;&gt;import multiprocessing
+
+def writer_proc(q):      
+    try:         
+        q.put(1, block = False) 
+    except:         
+        pass   
+
+def reader_proc(q):      
+    try:         
+        print(q.get(block = False))
+    except:         
+        pass
+
+if __name__ == &quot;__main__&quot;:
+    q = multiprocessing.Queue()
+    writer = multiprocessing.Process(target=writer_proc, args=(q,))  
+    writer.start()   
+
+    reader = multiprocessing.Process(target=reader_proc, args=(q,))  
+    reader.start()  
+
+    reader.join()  
+    writer.join()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-python&quot;&gt;import multiprocessing
+import time
+
+def proc1(pipe):
+    while True:
+        for i in arrange(0,10000):
+            print(&quot;send: %s&quot; %(i))
+            pipe.send(i)
+            time.sleep(1)
+
+def proc2(pipe):
+    while True:
+        print(&quot;proc2 rev:&quot;, pipe.recv())
+        time.sleep(1)
+
+def proc3(pipe):
+    while True:
+        print(&quot;PROC3 rev:&quot;, pipe.recv())
+        time.sleep(1)
+
+if __name__ == &quot;__main__&quot;:
+    pipe = multiprocessing.Pipe()
+    p1 = multiprocessing.Process(target=proc1, args=(pipe[0],))
+    p2 = multiprocessing.Process(target=proc2, args=(pipe[1],))
+    #p3 = multiprocessing.Process(target=proc3, args=(pipe[1],))
+
+    p1.start()
+    p2.start()
+    #p3.start()
+
+    p1.join()
+    p2.join()
+    #p3.join()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-python&quot;&gt;import multiprocessing
+import time
+
+def func(msg):
+    print(&quot;msg:&quot;, msg)
+    time.sleep(3)
+    print(&quot;end&quot;)
+
+if __name__ == &quot;__main__&quot;:
+    pool = multiprocessing.Pool(processes = 3)
+    for i in xrange(4):
+        msg = &quot;hello %d&quot; %(i)
+        pool.apply_async(func, (msg, ))   #维持执行的进程总数为processes，当一个进程执行完毕后会添加新的进程进去
+
+    print(&quot;Mark~ Mark~ Mark~~~~~~~~~~~~~~~~~~~~~~&quot;)
+    pool.close()
+    pool.join()   #调用join之前，先调用close函数，否则会出错。执行完close后不会有新的进程加入到pool,join函数等待所有子进程结束
+    print(&quot;Sub-process(es) done.&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-python&quot;&gt;import multiprocessing
+import time
+
+def func(msg):
+    print(&quot;msg:&quot;, msg)
+    time.sleep(3)
+    print(&quot;end&quot;)
+
+if __name__ == &quot;__main__&quot;:
+    pool = multiprocessing.Pool(processes = 3)
+    for i in range(0,3):
+        msg = &quot;hello %d&quot; %(i)
+        pool.apply(func, (msg, ))   #维持执行的进程总数为processes，当一个进程执行完毕后会添加新的进程进去
+
+    print(&quot;Mark~ Mark~ Mark~~~~~~~~~~~~~~~~~~~~~~&quot;)
+    pool.close()
+    pool.join()   #调用join之前，先调用close函数，否则会出错。执行完close后不会有新的进程加入到pool,join函数等待所有子进程结束
+    print(&quot;Sub-process(es) done.&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;msg: hello 0
+end
+msg: hello 1
+end
+msg: hello 2
+end
+Mark~ Mark~ Mark~~~~~~~~~~~~~~~~~~~~~~
+Sub-process(es) done.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-python&quot;&gt;import multiprocessing
+import time
+
+def func(msg):
+    print(&quot;msg:&quot;, msg)
+    time.sleep(3)
+    print(&quot;end&quot;)
+    return &quot;done&quot; + msg
+
+if __name__ == &quot;__main__&quot;:
+    pool = multiprocessing.Pool(processes=4)
+    result = []
+    for i in range(0,3):
+        msg = &quot;hello %d&quot; %(i)
+        result.append(pool.apply_async(func, (msg, )))
+    pool.close()
+    pool.join()
+    for res in result:
+        print(&quot;:::&quot;, res.get())
+    print(&quot;Sub-process(es) done.&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;msg: hello 1
+msg: hello 0
+msg: hello 2
+end
+end
+end
+::: donehello 0
+::: donehello 1
+::: donehello 2
+Sub-process(es) done.
+
+
+import multiprocessing
+import os, time, random
+
+def Lee():
+    print(&quot;\nRun task Lee-%s&quot; %(os.getpid())) #os.getpid()获取当前的进程的ID
+    start = time.time()
+    time.sleep(random.random() * 10) #random.random()随机生成0-1之间的小数
+    end = time.time()
+    print('Task Lee, runs %0.2f seconds.' %(end - start))
+
+def Marlon():
+    print(&quot;\nRun task Marlon-%s&quot; %(os.getpid()))
+    start = time.time()
+    time.sleep(random.random() * 40)
+    end=time.time()
+    print('Task Marlon runs %0.2f seconds.' %(end - start))
+
+def Allen():
+    print(&quot;\nRun task Allen-%s&quot; %(os.getpid()))
+    start = time.time()
+    time.sleep(random.random() * 30)
+    end = time.time()
+    print('Task Allen runs %0.2f seconds.' %(end - start))
+
+def Frank():
+    print(&quot;\nRun task Frank-%s&quot; %(os.getpid()))
+    start = time.time()
+    time.sleep(random.random() * 20)
+    end = time.time()
+    print('Task Frank runs %0.2f seconds.' %(end - start))
+        
+if __name__=='__main__':
+    function_list=  [Lee, Marlon, Allen, Frank] 
+    print(&quot;parent process %s&quot; %(os.getpid()))
+
+pool=multiprocessing.Pool(4)
+for func in function_list:
+    pool.apply_async(func)     #Pool执行函数，apply执行函数,当有一个进程执行完毕后，会添加一个新的进程到pool中
+
+print('Waiting for all subprocesses done...')
+pool.close()
+pool.join()    #调用join之前，一定要先调用close() 函数，否则会出错, close()执行后不会有新的进程加入到pool,join函数等待素有子进程结束
+print('All subprocesses done.')
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;######后记&lt;/p&gt;
+
+&lt;p&gt;python多进程的具体效果还是需要继续尝试。&lt;/p&gt;
+</description>
+        <pubDate>Mon, 17 Jul 2017 00:00:00 +0800</pubDate>
+        <link>http://0.0.0.0:4000/2017/07/17/mulitiporcess/</link>
+        <guid isPermaLink="true">http://0.0.0.0:4000/2017/07/17/mulitiporcess/</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>何谓影子银行？</title>
+        <description>&lt;h2 id=&quot;前言&quot;&gt;前言&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;#build&quot;&gt;这是一个简单而又痛苦的开始…&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;很久之前就学习了python但是一直没有做一个系统性的总结，最近开了博客就总结下。&lt;/p&gt;
+
+&lt;p id=&quot;build&quot;&gt;&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;正文&quot;&gt;正文&lt;/h2&gt;
+
+&lt;p&gt;&quot;影子银行”，正如其名，就像影子一样模仿着银行的一举一动，但却又没有具体的形体。对于影子银行，并没有一个放之四海而皆准的定义。
+&lt;/p&gt;
+&lt;p&gt;
+国际组织金融稳定委员会(Financial Stability Board)在2011年4月的一份报告中将其定义为“正常银行监管系统之外作为信用中介而运行的机构或者交易行为” （“credit intermediation involving entities and activities (fully or partially) outside the regular banking system”）然而，Stijn Claessens 和 Lev Ratnovski两位学者并不认同这个定义，他们认为，金融稳定委员会的定义一方面“误伤”了对冲基金、资产管理公司等受到一定程度监管、一般不认为是“影子银行”的金融机构；另一方面，一些国家的银行本身也在开展类似影子银行的业务，例如资产证券化、回购业务等。尽管定义上有差异，但大方向上，只要看到两点特征，就可以大致称之为“影子银行”：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;1. 从事类似银行的业务；&lt;/li&gt;
+&lt;li&gt;2. 游离于银行监管体系外。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;
+--银行的业务，万变不离其宗，无非就是在时间和空间的维度倒腾钱，把未来的钱倒腾到现在用，把通过吸存来取得的钱用于放贷用。这样的业务模式就会产生最致命的一点风险：期限错配（Maturity Mismatch）。银行吸收了大量的短期存款，储户随时有可能要求取款，但却要用这样的短期存款去支撑长期的放贷，这样长短期限的差异，就可能导致银行长期贷款没收回来，却要应对迫在眉睫的取款需求。这也就意味着，银行不可能将全部存款都用于长期放贷，必须留出一部分准备金用于应对取款，否则就可能导致“钱荒”。钱荒不是银行真的资不抵债了，而是缺乏流动性资金，储户担心不能随时取回存款，于是争先恐后冲向银行，加剧钱荒，所以人们说银行挤兑是一种“自我实现的预言”。除了上面所说的流动性风险之外，银行业务还产生另外一种风险，系统性风险。当银行和其他机构之间互负债务债权关系，或者互相持有对方的产品时，一家机构的的违约，就可能导致与之联系的其他机构受到冲击，导致危机在系统中蔓延。
+&lt;/p&gt;
+&lt;p&gt;
+“影子银行”：影子银行的业务，也是在拿时间来变戏法。举个例子：有种很传统的资产证券化产品，叫做资产支持证券(Asset Backed Security),就是将未来的现金流打包起来放到现在卖。我做小生意，一年能赚一万块，五年有五万块入账，那么资产支持证券的发行者就可以找到我说：“给你四万块，未来五年的现金流都流到我口袋里好了”，这就是用把未来的预期收益一下子挪到现在来买卖。而发行者可以把买回来的收益权打包成证券，找到其他的投资者，你五块我十块，购买这样的证券并许诺投资回报。这样的套路，类似于银行面向公众吸收存款，发放贷款，赚取存贷款利息差。以资产支持证券这种基本款的产品为蓝本，还可以衍生出很多其他的变体，例如抵押贷款证券(Mortgage Backed Security),这就是讲将未来贷款的还款现金流打包成证券来发行。 甚至连投资这类证券的预期收益，也可以继续打包成资产，在上面一层一层叠上去。也就是说，不仅做生意的预期收益可以用于作为资产来做成证券化产品，就连投资证券化产品的收益，也可以再次打包成证券。不管怎么挪，期限错配问题和随之而来的流动性风险依然存在。&lt;/p&gt;
+
+&lt;p&gt;以美国次贷危机为例，抵押贷款证券的收益来源于贷款买房者在未来的还款，当这笔还款落空的时候，就无法向投资者支付投资收益。这就类似于银行的长期贷款出现了坏账。然而，银行有了一笔坏账，还可以用自有资金去满足偿付的需求，而资产证券化产品则缺乏这样一个安全垫。（这也就是为什么后来的多德弗兰克法案强调发行者自己持有一部分产品，目的就是要像银行的准备金一样，提供吸收违约影响的缓冲区）。流动性风险依然存在，系统性风险还更高了。银行贷款毕竟还不能轻而易举地来回倒手，而证券产品可以很灵活地来回买卖。而且，一家机构的资产，很有可能被打包成产品，为另一家机构所持有，这就将大家都捆成了一条绳上的蚂蚱。风险并没有减少，但监管却少了，没有类似于准备金之类的强制性要求，也没有充足的信息披露，这就是为什么人们说起“影子银行”谈虎色变的原因之一。--以上举了金融衍生品的例子&lt;/p&gt;
+
+&lt;p&gt;但影子银行的具体表现形式远不限于此。说一个东西是不是影子银行，寻本溯源，还是要把握一开始说的两点：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;1. 从事类似银行的业务；&lt;/li&gt;
+&lt;li&gt;2. 游离于银行监管体系外。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;这样说来，经营民间借贷的地下钱庄、小额贷款公司，担保公司等可以是影子银行；理财产品和信托业务，可以是影子银行。影子银行不一定是多么高大上的金融创新，有一种“影子银行”已经存在了几百上千年：当铺。典当，不就是一种原始的抵押贷款嘛。--影子银行未必是坏的，它能提高资金配置的效率，降低获得资金的门槛。举个例子：在存在利率管制的情况下，银行无论是贷给大企业还是小企业，赚取的贷款利息不会有太大差别，但两者的风险和管理成本却有天壤之别。在不允许银行对两者分别制定不同利息的情况下，您说，银行会偏好向谁贷款呢？影子银行，则能够突破这样的限制，给风险水平不同的贷款定下不同的利息水平，这就是一种对分配效率的改善。
+&lt;/p&gt;
+&lt;p&gt;–参考文献：Simin Gao &amp;amp; Qianyu Wang, Chasing the Shadow in Different Worlds: Shadow Banking and its Regulation in the U.S. and China, Manchester Journal of International Economic Law , 2016 , 11 (3) :421-458&lt;/p&gt;
+
+&lt;p&gt;作者：王瑞恩
+链接：https://www.zhihu.com/question/19594906/answer/198995627
+来源：知乎&lt;/p&gt;
+
+&lt;p&gt;影子银行大致可以说是不通过银行直接发放的贷款。
+具体包括：1、投资于企业贷款资产的银行理财产品。一般是投资于高信用等级企业贷款资产，比如大型央企贷款或者应收账款。2、房地产信托、房地产私募。向个人及机构投资者募集资金发放，这是近两年房地产公司的主要融资手段，包括万科恒大等龙头房企都广泛使用。3、债权类信托、私募基金，以及附加回购协议的各类信托、私募基金。投资方向可以说是千奇百怪，矿产资源类企业是比较常见的，还出现了艺术品、红酒等等。4、近年来如雨后春笋涌现的小额贷款公司、担保公司。5、民间集资、私人借贷。如沿海地区常见的所谓“标会”的集资借贷。&lt;/p&gt;
+
+&lt;p&gt;作者：garhom
+链接：https://www.zhihu.com/question/19594906/answer/15199988
+来源：知乎&lt;/p&gt;
+
+&lt;h2 id=&quot;后记&quot;&gt;后记&lt;/h2&gt;
+
+&lt;p&gt;看到知乎上关于影子银行的讨论，觉得很有趣，就搬过来总结下。&lt;/p&gt;
+</description>
+        <pubDate>Sun, 16 Jul 2017 00:00:00 +0800</pubDate>
+        <link>http://0.0.0.0:4000/2017/07/16/shadowbank/</link>
+        <guid isPermaLink="true">http://0.0.0.0:4000/2017/07/16/shadowbank/</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>为什么在执行八皇后程序的时候python比c++慢那么多</title>
+        <description>&lt;h2 id=&quot;前言&quot;&gt;前言&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;#build&quot;&gt;这是一个简单而又痛苦的开始…&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;很久之前就学习了python但是一直没有做一个系统性的总结，最近开了博客就总结下。&lt;/p&gt;
+
+&lt;p id=&quot;build&quot;&gt;&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;正文&quot;&gt;正文&lt;/h2&gt;
+
+&lt;p&gt;这个八皇后的DFS，我的C++代码在不加某些评估性剪枝的情况下对15需要算18s左右（开O2大约8.6秒），但是可以确定的是你的解决方案里用了循环与递归。接下来需要分析的无非是Python慢在哪个细节，以及能否改进的问题。下面是两段用来测试的代码，首先是Python的：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;import time
+
+def calc(n, i=0, cols=0, diags=0, trans=0):
+    if i == n:
+        return 1
+    else:
+        rt = 0
+        for j in range(n):
+            col = 1 &amp;lt;&amp;lt; j
+            diag = 1 &amp;lt;&amp;lt; (i - j + n - 1)
+            tran = 1 &amp;lt;&amp;lt; (i + j)
+            if (col &amp;amp; cols) == 0 and (diag &amp;amp; diags) == 0 and (tran &amp;amp; trans) == 0:
+                rt += calc(n, i+1, cols | col, diags | diag, trans | tran)
+        return rt
+
+if __name__ == '__main__':
+    t = time.time()
+    print(calc(13))
+    print(time.time() - t)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;以及C++代码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;chrono&amp;gt;
+#include &amp;lt;iostream&amp;gt;
+
+using namespace std;
+
+long calc(int n, int i = 0, long cols = 0, long diags = 0, long trans = 0) {
+    if (i == n) {
+        return 1;
+    } else {
+        long rt = 0;
+        for (int j = 0; j &amp;lt; n; j++) {
+            long col = (1 &amp;lt;&amp;lt; j);
+            long diag = (1 &amp;lt;&amp;lt; (i - j + n - 1));
+            long tran = (1 &amp;lt;&amp;lt; (i + j));
+            if (!(col &amp;amp; cols) &amp;amp;&amp;amp; !(diag &amp;amp; diags) &amp;amp;&amp;amp; !(tran &amp;amp; trans)) {
+                rt += calc(n, i + 1, col | cols, diag | diags, tran | trans);
+            }
+        }
+        return rt;
+    }
+}
+
+int main() {
+    auto t = chrono::system_clock::now();
+    cout &amp;lt;&amp;lt; calc(13) &amp;lt;&amp;lt; endl;
+    cout &amp;lt;&amp;lt; (chrono::system_clock::now() - t).count() * 1e-6 &amp;lt;&amp;lt; endl;
+    return 0;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;编译器用的Clang++ 8.1.0，Python解释器则是CPython 3.6.0。由于这里压根不涉及多线程问题，那基本上就跟GIL没有关系了。对于n=13，C++代码跑了0.48秒。为了确保不是编译器悄悄干了活，使用了-O0（实际上开O2能到0.2秒左右）。Python跑了24秒。对于这个例子，最直接的影响其实在于：Python是逐句解释执行的，C++是先编译成本地代码，期间还有编译期的类型检查，不存在动态类型、动态检查，并且可以进行编译器优化。之后应该考虑一下能不能提高一点点效率呢？然后根据一般规律，Python的循环很慢，可以考虑改成列表展开：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;def calc(n, i=0, cols=0, diags=0, trans=0):
+    if i == n:
+        return 1
+    else:
+        return sum(
+            [
+                calc(n, i + 1, cols | (1 &amp;lt;&amp;lt; j), diags | (1 &amp;lt;&amp;lt; (i - j + n - 1)), trans | (1 &amp;lt;&amp;lt; (i + j)))
+                for j in range(n)
+                if (cols &amp;amp; (1 &amp;lt;&amp;lt; j)) == 0 and (diags &amp;amp; (1 &amp;lt;&amp;lt; (i - j + n - 1))) == 0 and (trans &amp;amp; (1 &amp;lt;&amp;lt; (i + j))) == 0
+            ]
+        )
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;理应速度更快，实时也验证了：这样的Python代码需要跑18秒左右。仍然存在数量级的差异，并没有解决根本问题，但是说明了一点，CPython中for loop的实现其实一点都不快。而后考虑一下，如果我们使用其它解释器，特别是包含JIT的解释器，它将在执行过程中尝试将代码编译成本地二进制编码并执行，同时还能赋予一些额外优化，会不会好很多？那么单纯地尝试一下PyPy3(5.8.0-beta, Python 3.5.3)，代码能有多快？实际上，单纯的只是替换一下解释器，换成PyPy来做的话，原本这个24s的Python源码就只需要1s左右了。单单一个JIT可以使得性能提升一个数量级，充分说明官方的CPython解释器的性能不好，PyPy的JIT比较简单纯粹，并不是很激进，但是同样的代码如果能借助更好的JIT，以及更高性能的库，则可以体现出完全不同的性能差。例如，如果使用llvm做JIT，同时加上能使用一些成熟的数学库做优化。我们知道NumPy这样的C扩展能够很大程度提高Python做数值计算的性能，同样的我们也可以用Cython或者直接用C写Python扩展来强化计算能力。但是人都是懒的，重新写代码实在是有些麻烦。对于Python这种生态强大的玩意来说，如果计算代码中只是单纯的使用了numpy的简单结构以及Python自身的标准结构，使用numba可能是最简单快速的办法。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;import time
+
+
+from numba import jit
+
+
+@jit
+def calc(n, i=0, cols=0, diags=0, trans=0):
+    if i == n:
+        return 1
+    else:
+        rt = 0
+        for j in range(n):
+            col = 1 &amp;lt;&amp;lt; j
+            diag = 1 &amp;lt;&amp;lt; (i - j + n - 1)
+            tran = 1 &amp;lt;&amp;lt; (i + j)
+
+            if (col &amp;amp; cols) == 0 and (diag &amp;amp; diags) == 0 and (tran &amp;amp; trans) == 0:
+                rt += calc(n, i+1, cols | col, diags | diag, trans | tran)
+        return rt
+
+
+
+if __name__ == '__main__':
+    t = time.time()
+    print(calc(13))
+    print(time.time() - t)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这里只是很简单地加入了两行代码：从numba导入jit，用jit装饰计算函数。这段代码的运行时间直接就缩短到了0.4s，和C++版本的O0编译后的程序速度几乎一样。这还是考虑到JIT需要预热的情况在内。这段代码，若是计算15的规模，只需要6.5s左右，甚至优于开O2的C++版本。究其原因，JIT不仅仅在运行过程中将代码转为本地机器码，同时还会尝试进行优化。如果用cProfile之类的玩意分析一下运行过程，可以清楚看到这个优化过程。
+&lt;/p&gt;
+&lt;p&gt;
+其实numba也是基于llvm的，这一点没啥差异；差异在于编译的优化是在编译时进行优化，目标代码是保持程序完整功能的；JIT是运行时的即时编译，同样的函数会被JIT编译若干次并在运行时选择最快的，从而优化其性能。例如全在栈空间的问题，C++里每次调用固定了内存大小，但JIT单元可能会在不同的时候使用不同的变量大小，甚至可能直接转成尾递归再优化也说不准……我没去翻JIT结果，也没去深究numba的JIT实现（如果是numba pro，可以确定的是它还直接使用三方库以及SIMD等特性加速），但是提高效果是可以看到的。
+&lt;/p&gt;
+&lt;p&gt;
+编译语言和解释语言，从本质上来说就是完全不同的：编译语言能最终直接对应到机器码。C/C++是典型的编译语言。有JIT的解释语言和真·解释语言，从实现上来说完全不同：JIT可以通过技术手段将解释语言进行重新整理，变成适合编译的结构，然后再转换成机器码，得到接近于编译语言的性能。典型的JIT语言是Java、Javascript同样是解释语言，抽象层次低的语言会比抽象层次高的语言实现起来更容易，运行也更快，典型的如Lua而CPython不巧是那个解释的、没有JIT的、而且抽象层次很高的语言。所以首先CPython就不该跟C++比，最应该比的是Javascript，它跟Javascript比起来最大的负担在于与CPython兼容，比如说支持C API——CPython有一组规定好的数据结构和接口用来让Python和C进行互操作，这个接口保证了Python可以调用C，C也能调用Python，但是这严重妨碍了JIT引擎的设计；再比如CPython的引用计数与标记-扫描混用的GC算法。
+&lt;/p&gt;
+&lt;p&gt;
+JIT又称为准时制生产方式（Just In Time简称JIT），又称作无库存生产方式（stockless production），零库存（zero inventories），一个流（one-piece flow）或者超级市场生产方式（supermarket production）。
+&lt;/p&gt;
+&lt;p&gt;
+JIT是just in time,即时编译技术。使用该技术，能够加速java程序的执行速度。下面，就对该技术做个简单的讲解。
+首先，我们大家都知道，通常javac将程序源代码编译，转换成java字节码，JVM通过解释字节码将其翻译成对应的机器指令，逐条读入，逐条解释翻译。很显然，经过解释执行，其执行速度必然会比可执行的二进制字节码程序慢。为了提高执行速度，引入了JIT技术。在运行时JIT会把翻译过的机器码保存起来，已备下次使用，因此从理论上来说，采用该JIT技术可以，可以接近以前纯编译技术。当JIT编译启用时（默认是启用的），JVM读入.class文件解释后，将其发给JIT编译器。JIT编译器将字节码编译成本机机器代码。由于JIT对每条字节码都进行编译，造成了编译过程负担过重。为了避免这种情况，当前的JIT只对经常执行的字节码进行编译，如循环等。需要说明的是，JIT并不总是奏效，不能期望JIT一定能够加速你代码执行的速度，更糟糕的是她有可能降低代码的执行速度。这取决于你的代码结构，当然很多情况下我们还是能够如愿以偿的。
+&lt;/p&gt;
+
+&lt;h2 id=&quot;后记&quot;&gt;后记&lt;/h2&gt;
+
+&lt;p&gt;python的效率低还有可能是多线程的问题，下一节总结多线程问题的解决方案。&lt;/p&gt;
+</description>
+        <pubDate>Sat, 15 Jul 2017 00:00:00 +0800</pubDate>
+        <link>http://0.0.0.0:4000/2017/07/15/python-1/</link>
+        <guid isPermaLink="true">http://0.0.0.0:4000/2017/07/15/python-1/</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>深度学习巨头Yann Lecun 中科院自动化所座谈及清华大学讲座</title>
+        <description>&lt;div&gt;
+    2017年3月22日星期三，空气重度污染的北京迎来了人工智能领域一位重量级的嘉宾——Facebook人工智能实验室主任，卷积神经网络的发明人Yann Lecun教授。Yann Lecun一行上午在中国科学院自动化研究所举行了40分钟的小型座谈会，下午在清华大学举办了“深度学习与人工智能的未来”主题演讲。笔者有幸全程参与了上述两项活动，现将活动的主要内容及个人感悟与大家分享，欢迎各位分享、转发。未经本人授权，任何组织、个人不得擅自使用本文的文字及图片资料。
+
+    上午 中国科学院自动化研究所智能化大厦17层紫东咖啡厅 主场
+
+    Lecun的到来所里之前也没有做过多的宣传，可能是由于上一次Andrew NG来做报告，整个学术报告厅被挤爆，这一次所里只举行了一个40人左右小而精的座谈会。主要形式以嘉宾和听众互动为主。座谈会的主持人是我们的副所长刘成林研究员，主要嘉宾包括Yann Lecun教授，Facebook 副总裁企业发展副总裁Vaughan Smith博士和田渊栋博士。
+
+    座谈会的开始，刘所长进行了热情而简短的欢迎致辞，接下来就以问答互动的形式开始了座谈。每一个问题我可能无法全部记清楚，现把我自己印象比较深刻的问题简要总结，部分问题在下午清华的讲座中也谈到了。其中一位同学谈到了了深度学习目前还没有相关理论解释的问题。Lecun的观点是，并非所有的研究都是现有理论后有实践，很多问题都是人们先发现了某种现象，后来才找到了合理的理论解释。在下午清华的讲座的QA环节，Lecun又举了几个具体例子，瓦特发明蒸汽机是在动力学理论之前，人们最早发明飞机的时候，也没有完善的空气动力学理论。深度学习就是理论在实践之后。刘所长问了一个关于GAN的问题，Lecun对GAN赞不绝口，并补充说明了GAN不是他自己的idea，是Ian Goodfellow在读博士期间提出来的，下午清华讲座中有关于GAN的详细介绍，这里暂不展开。还有同学问到了哪些领域深度学习并不work，Lecun回答是也谈到了Logistic Regression这些较为经典的模型可以发挥威力的场景。（笔者补充：其实当我们的数据量较小的时候，深度学习的效果可能没有传统的经典模型那么好）。很幸运自己获得了座谈会最后的一个提问机会，我的问题是关于深度学习对抗样本的，深度学习在计算机视觉、语音识别、自然语言处理都取得了突破性的进展，但是研究者也发现深度神经网络也是很容易被愚弄的，当对一张图片加上人为的噪声之后，系统会将其错误分类，类似的现象在强化学习领域里也被观察到，智能体可能会被攻击者误导执行错误的动作，对抗样本和AI的安全密切相关，对此，您有何评论？Lecun说到这是一个很好的问题，他在做手写字符识别的时候也注意到了这种现象，当时为了探索什么图像会让卷积网络完美的预测一个数字4，然后将梯度反向传播的输入图像，所得到的结果和预想的是不一样的。他认为非监督学习是解决对抗样本问题的一个比较有效的思路。在座谈会的最后，刘所长请Yann Lecun教授给在座的同学一句寄语，Lecen教授说我们现在正处于一个AI发展很好的时代，未来AI取得的重要突破，在座的同学就可能扮演重要的角色。教授的谆谆教诲真是给我我等莫大的学习动力。
+
+&lt;/div&gt;
+</description>
+        <pubDate>Fri, 14 Jul 2017 20:00:00 +0800</pubDate>
+        <link>http://0.0.0.0:4000/2017/07/14/miui6/</link>
+        <guid isPermaLink="true">http://0.0.0.0:4000/2017/07/14/miui6/</guid>
+        
+        <category>知乎</category>
+        
+        <category>深度学习</category>
+        
+        
+      </item>
     
       <item>
         <title>CNN学习总结(一)</title>

@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="关于深度学习与量化交易、黑客与画家 | 高冰洁，Deep Learning & Quantitive Analysis，Nature Language Processing，Machine Learning | 这里是 @Diane冰洁 的个人博客，与你一起发现更大的世界。">
+    <meta name="keyword"  content="冰洁, Diane冰洁, Diane, Trader, Bingjie, @bingjie, 冰洁的博客, Bingjie Blog, 博客, 个人网站, 互联网, 人工智能, 深度学习, 自然语言处理, 量化投资, 风险对冲, 一个向往远方的小白">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>Beta对冲 - 冰洁的博客 | Bingjie Blog</title>
+
+    <link rel="canonical" href="http://0.0.0.0:4000/2017/07/19/beta/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="http://cdn.staticfile.org/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Bingjie Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/about/">About</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/portfolio/">Portfolio</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/tags/">Tags</a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    var __HuxNav__ = {
+        close: function(){
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        },
+        open: function(){
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+
+    // Bind Event
+    $toggle.addEventListener('click', function(e){
+        if ($navbar.className.indexOf('in') > 0) {
+            __HuxNav__.close()
+        }else{
+            __HuxNav__.open()
+        }
+    })
+
+    /**
+     * Since Fastclick is used to delegate 'touchstart' globally
+     * to hack 300ms delay in iOS by performing a fake 'click',
+     * Using 'e.stopPropagation' to stop 'touchstart' event from 
+     * $toggle/$collapse will break global delegation.
+     * 
+     * Instead, we use a 'e.target' filter to prevent handler
+     * added to document close HuxNav.  
+     *
+     * Also, we use 'click' instead of 'touchstart' as compromise
+     */
+    document.addEventListener('click', function(e){
+        if(e.target == $toggle) return;
+        if(e.target.className == 'icon-bar') return;
+        __HuxNav__.close();
+    })
+</script>
+
+
+    <!-- Image to hack wechat -->
+<!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="/img/post-bg-universe.jpg" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/post-bg-universe.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                    </div>
+                    <h1>Beta对冲</h1>
+                    
+                    
+                    <h2 class="subheading">什么是市场中性？</h2>
+                    
+                    <span class="meta">Posted by Diane on July 19, 2017</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+				<h2 id="前言">前言</h2>
+
+<p><a href="#build">嗓子疼，快感冒了…</a></p>
+
+<p>总结一下金融知识</p>
+
+<p id="build"></p>
+<hr />
+<h2 id="正文">正文</h2>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<p>因子模型
+因子模型是通过其他若干项资产回报的线性组合来解释一项资产回报的一种方式，因子模型的一般形式是：</p>
+<p>
+\begin{align}\notag 
+Y=α+β_{1}X_{1}+β_{2}X_{2}+...+β_{n}X_{n}
+\end{align}
+</p>
+<blockquote>什么是beta?</blockquote>
+
+<p>一项资产的beta是该资产收益率与其他资产收益率通过上述模型回归拟合的β。比如，我们用回归模型</p>
+<p>
+\begin{align}\notag Y_{gzmt}=α+βX_{benchmark}Y_{gzmt}=α+βX_{benchmark}
+\end{align}
+</p>
+<p>来描述贵州茅台收益率相对于沪深300回归的ββ值，如果我们使用模型</p>
+<p>
+\begin{align}\notag
+Y_{gzmt}=α+β_{1}X_{benchmark}+β_{2}X_{wly}Y_{gzmt}=α+β_{1}X_{benchmark}+β_{2}X_{wly}
+\end{align}
+</p>
+<p>那么就会出现两个beta,一个是贵州茅台对沪深300的风险暴露，一个是贵州茅台对五粮液的风险暴露。
+
+通常而言，betabeta更多地指该资产相对于基准指数的风险暴露，即只相对于市场基准的一元线性回归所得到的回归系数。</p>
+
+<blockqoute>
+什么是对冲?
+&lt;/blockquote&gt;
+<p>如果我们确定我们的投资组合的回报与市场的关系如下面公式所示：</p>
+<p>
+\begin{align}\notag
+Y_{portfolio}=α+βX_{hs300}
+\end{align}
+</p>
+<p>
+\begin{align}\notag
+Y_{portfolio}=α+βX_{hs300}
+\end{align}
+</p>
+<p>于是，我们可以建立沪深300空头头寸来对冲市场风险，对冲的市值为−βV,如果我们持有多头组合的市值是V。因为我们多头组合的收益为α+βXhs300α+βXhs300,沪深300对冲空头的收益为−βXhs300−βXhs300,于是我们最终的收益为α+βXhs300−βXhs300=α+βXhs300−βXhs300=α,于是我们的收益来源只有αα，而与市场系统风险没有关系。
+</p>
+
+<blockquote>风险暴露</blockquote>
+
+<p>一般而言，beta描述的是持有资产所承担的系统风险敞口这一概念。 如果一项资产相对沪深300基准指数具有较高的β暴露水平，那么在市场上涨时，它的表现将会很好，当市场下跌时，它表现很差。 高ββ对应于高系统风险（高市场风险），意味着你的投资更具有波动性。市场中性策略对于拥有大量现金池的机构（银行、保险、公募基金等）最具吸引力。</p>
+
+<blockquote>风险管理</blockquote>
+
+<p>减少因子风险暴露的过程称为风险管理。对冲是在实践中进行风险管理的最佳方式之一。
+
+本文通过具体案例来了解如何做到市场风险对冲的，我们使用贵州茅台和基准沪深300来构建我们的投资组合，将沪深300的权重设为-β（由于持有基准空头头寸）。</p>
+
+```
+	# 得到过去一年得到的alpha 和beta值
+	start_date = '2014-01-01'
+	end_date = '2015-01-01'
+	asset = D.history_data('600519.SHA',start_date,end_date,fields=['close']).set_index('date')['close']
+	benchmark = D.history_data('000300.SHA',start_date,end_date,fields=['close']).set_index('date')['close']
+	r_a = asset.pct_change()[1:]
+	r_b = benchmark.pct_change()[1:]
+	X = r_b.values
+	Y = r_a.values
+	historical_alpha, historical_beta = linreg(X,Y)
+	print('Asset Historical Estimate:')
+	print('alpha: ' + str(historical_alpha))
+	print('beta: ' + str(historical_beta))
+
+	# 获取下一年的数据:
+	start_date = '2015-01-01'
+	end_date = '2015-06-01'
+	asset = D.history_data('600519.SHA',start_date,end_date,fields=['close']).set_index('date')['close']
+	benchmark = D.history_data('000300.SHA',start_date,end_date,fields=['close']).set_index('date')['close']
+	asset.name = '600519.SHA'
+	benchmark.name = '000300.SHA'
+	# 重复前面的过程来计算alpha 和beta值
+	r_a = asset.pct_change()[1:]
+	r_b = benchmark.pct_change()[1:]
+	X = r_b.values
+	Y = r_a.values
+	alpha, beta = linreg(X,Y)
+	print('Asset Out of Sample Estimate:')
+	print('alpha: ' + str(alpha))
+	print('beta: ' + str(beta))
+
+	# 构建对冲投资组合来计算alpha、beta
+	portfolio = -1*historical_beta*r_b + r_a
+	P = portfolio.values
+	alpha, beta = linreg(X,P)
+	print('Portfolio Out of Sample:')
+	print ('alpha: ' + str(alpha))
+	print ('beta: ' + str(beta))
+
+
+	# 绘制图形
+	portfolio.name = "600519.SHA + Hedge"
+	portfolio.plot(alpha=0.9,figsize=[9,6])
+	r_a.plot(alpha=0.5);
+	r_b.plot(alpha=0.5)
+	plt.ylabel("Daily Return")
+	plt.legend();
+
+
+
+	Asset Historical Estimate:
+	alpha: 0.00116253939056
+	beta: 0.672934653004
+	Asset Out of Sample Estimate:
+	alpha: 0.00020366206079
+	beta: 0.866552969103
+	Portfolio Out of Sample:
+	alpha: 0.000203662008879
+	beta: 0.193618313006
+```
+
+<p>从上图可以看出，对冲后的收益降低了，但波动性也降低了。历史估计出的贝塔值在样本外的一年中是有效的，将资产的贝塔值0.673通过对冲降低到了0.193，也就是说降低了2/3，这样的对冲效果是比较明显的，而且也反映出历史的贝塔值是有效的，当然，要做到更好的效果，可以采取滚动估计贝塔的方法。</p>
+<p>市场中性策略是指同时构建多头和空头头寸以对冲市场风险，在市场不论上涨或者下跌的环境下均能获得稳定收益的一种投资策略，市场中性策略主要依据统计套利的量化分析。</p>
+<ul>
+<li>(1)阿尔法套利：做多具有阿尔法值的证券产品，做空指数期货，实现回避系统性风险下的超越市场指数的阿尔法收益。</li>
+
+<li>(2)贝塔套利：期指市场上做空，在股票市场上构建拟合300指数的成份股，赚取其中的价差，这种被动型的套利。</li>
+</ul>
+
+<blockquote>什么是市盈率</blockquote>
+<p>市盈率是衡量股价高低和企业盈利能力的一个重要指标。由于市盈率把股价和企业盈利能力结合起来，其水平高低更真实地反映了股票价格的高低。例如，股价同为50元的两只股票，其每股收益分别为5元和1元，则其市盈率分别是10倍和50倍，也就是说具当前的实际价格水平相差5倍。若企业盈利能力不变，这说明投资者以同样50元价格购买的两种股票，要分别在10年和50年以后才能从企业盈利中收回投资。因此市盈率倍数可以简单地理解为要收回投资，最少需要多少年，很明显市盈率越低，越具有吸引力。</p>
+
+<p>通常，此分析是基于历史数据，而对历史风险暴露的估计可能会影响未来的风险暴露。 因此，计算因子风险暴露是不够的。 你必须对风险暴露保持信心，并明白对风险暴露的建模是否合理。</p>
+
+<p>运用多因子模型计算因子风险暴露
+,我们可以运用多因子模型分析一个组合中风险和收益的来源，多因子模型对收益的分解如下：<p>
+
+<p>
+\begin{align}\notag
+R_{i}=a_{i}+b_{i1}F_{1}+b_{i2}F_{2}+...+b_{iK}F_{K}+ϵ_{i}
+\end{align}
+
+</p>
+
+<p>通过对历史收益率进行建模，我们可以分析出收益中有多少是来自因子收益率，有多少来自资产特质波动（ϵϵ）。 我们也可以研究投资组合所面临的风险来源，即投资组合的因子暴露。</p>
+
+<p>在风险分析中，我们经常对主动回报（相对于基准的回报）和主动风险（主动回报的标准差，也称为跟踪误差或跟踪风险）进行建模。</p>
+
+<p>例如，我们可计算到一个因子对主动风险的边际贡献——FMCAR。 对于因子jj，表示为：</p>
+
+<p>
+\begin{align}\notag
+FMCAR_{j}=\frac{bj\sum_{i=1}^{k}{b_{i}cov(F_{j},F_{i})}}{(Active Risk)^2}
+\end{align}
+</p>
+<p>bj表示组合对因子j的风险暴露,bi表示组合对因子i的风险暴露,K表示一共K个因子。FMCARj这项指标这告诉我们，假设其他条件不变，暴露在因子j下我们增加了多少风险。</p>
+
+<p>下面我们运用多因素模型和线性回归工具来计算某只股票的回报率相对于这些因子的风险暴露程度。我们以某个资产组合的主动收益作为被解释变量，对因子做回归，一个因子对主动收益贡献越大，那么这个资产组合的主动收益对于该因子的暴露程度也越高。</p>
+```
+	# 我们以5只股票的组合（portfolio）举例
+	instruments = D.instruments()[:5]
+	Stock_matrix = D.history_data(instruments,start_date,end_date,fields=['close'])
+	Stock_matrix = pd.pivot_table(Stock_matrix,values='close',index=['date'],columns=['instrument'])
+	portfolio = Stock_matrix.pct_change()[1:]
+	# 组合的每日收益率（等权重组合）
+	R = np.mean(portfolio, axis=1)
+	# 基准收益率
+	bench = D.history_data('000300.SHA',start_date, end_date, fields=['close']).set_index('date')['close'].pct_change()[1:]
+	# 主动收益率
+	active = R - bench
+	# 建立一个常数项，为下文回归做准备
+	constant = pd.TimeSeries(np.ones(len(active.index)), index=active.index)
+	df = pd.DataFrame({'R': active,
+	'F1': SMB,
+	'F2': HML,
+	'Constant': constant})
+	# 删除含有缺失值的行
+	df = df.dropna()
+	#线性回归并获取回归系数
+	b1, b2 = regression.linear_model.OLS(df['R'], df[['F1', 'F2']]).fit().params
+	# 因子对于主动收益的敏感性（即因子暴露）
+	print('Sensitivities of active returns to factors:\nSMB: %f\nHML: %f' %  (b1, b2))
+	Sensitivities of active returns to factors:
+	SMB: 0.430179
+	HML: -0.104828
+	利用前文给的公式，计算因子对主动收益风险平方的边际贡献（factors' marginal contributions to active risk squared，FMCAR ）
+
+	# 计算因子风险贡献
+	F1 = df['F1']
+	F2 = df['F2']
+	cov = np.cov(F1, F2)
+	ar_squared = (active.std())**2
+	fmcar1 = (b1*(b2*cov[0,1] + b1*cov[0,0]))/ar_squared
+	fmcar2 = (b2*(b1*cov[0,1] + b2*cov[1,1]))/ar_squared
+	print('SMB Risk Contribution:', fmcar1)
+	print('HML Risk Contribution:', fmcar2)
+	SMB Risk Contribution: 0.145330519205
+	HML Risk Contribution: 0.0321851978612
+```
+<p>余下的风险可以归结于一些特有的风险因素，即我们没有加入模型的因子或者资产组合本身独有的某种风险。 通常我们会关注一下对这些因子的风险暴露随时间如何变化。让我们rolling一下～</p>
+```
+	# 计算滚动的beta
+	model = pd.stats.ols.MovingOLS(y = df['R'], x=df[['F1', 'F2']], 
+	window_type='rolling', 
+	window=100)   
+	rolling_parameter_estimates = model.beta
+	rolling_parameter_estimates.plot()
+	plt.title('Computed Betas');
+	plt.legend(['F1 Beta', 'F2 Beta', 'Intercept']);
+```
+现在我们来看看FMCAR是如何随时间变化的
+```
+	# 计算方差协方差
+	# 去除有缺省值的日期，从有实际有效值的日期开始
+	covariances = pd.rolling_cov(df[['F1', 'F2']], window=100)[99:]
+	# 计算主动风险
+	active_risk_squared = pd.rolling_std(active, window = 100)[99:]**2
+	# 计算beta
+	betas = rolling_parameter_estimates[['F1', 'F2']]
+
+	# 新建一个空的dataframe
+	FMCAR = pd.DataFrame(index=betas.index, columns=betas.columns)
+
+	# 每个因子循环
+	for factor in betas.columns:
+	# 每一天循环
+	for t in betas.index:
+	# 求beta与协方差之积的和，见公式
+	s = np.sum(betas.loc[t] * covariances[t][factor])
+	# 获取beta
+	b = betas.loc[t][factor]
+	# 获取主动风险
+	AR = active_risk_squared.loc[t]
+	# 估计当天的FMCAR
+	FMCAR[factor][t] = b * s / AR
+```
+<p>了解历史数据中组合对各个因子的暴露程度是很有趣的，但只有将它用在对未来预测上时，它才有用武之地。但我们不是总能够放心地认为未来的情况与现在相同，由于随时间会变化，对风险暴露程度取平均值也很容易出现问题。我们可以给均值加上一个置信区间，但只有当其分布是正态分布或者表现很稳健才行。我们来看看Jarque-Bera测验的结果。</p>
+```
+	from statsmodels.stats.stattools import jarque_bera
+	_, pvalue1, _, _ = jarque_bera(FMCAR['F1'].dropna().values)
+	_, pvalue2, _, _ = jarque_bera(FMCAR['F2'].dropna().values)
+
+	<p>print('p-value F1_FMCAR is normally distributed', pvalue1)
+	print('p-value F2_FMCAR is normally distributed', pvalue2)
+	p-value F1_FMCAR is normally distributed 4.05960522776e-08
+	p-value F2_FMCAR is normally distributed 0.000299975153613
+```
+<p>p_value显示我们可以显著的拒绝其为正态分布，可见对于未来这些因素会导致多少风险暴露是很难估计的，所以在使用这些统计模型去估计风险暴露并以此为依据来对冲是需要万分小心的。</p>
+
+## 后记
+
+没有后记
+</p></p></p></blockqoute>
+
+
+                <hr>
+
+                
+                <!-- 多说 Share start -->
+                </style>
+                <div class="ds-share"
+                    style="text-align: right"
+                    data-thread-key="/2017/07/19/beta"
+                    data-title="Beta对冲"
+                    data-url="http://0.0.0.0:4000/2017/07/19/beta/"
+                    data-images="http://0.0.0.0:4000/img/post-bg-universe.jpg"
+                    data-content="前言
+
+嗓子疼，快感冒了…
+
+总结一下金融知识
+
+
+
+正文
+
+
+因子模型
+因子模型是通过其他若干项资产回报的线性组合来解释一项资产回报的一种方式，因子模型... | 冰洁的博客 | Bingjie Blog " >
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat flat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo flat" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban flat" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- 多说 Share end-->
+                
+
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2017/07/17/mulitiporcess/" data-toggle="tooltip" data-placement="top" title="PYTHON多进程总结">
+                        Previous<br>
+                        <span>PYTHON多进程总结</span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2017/07/26/financial-dataplatform/" data-toggle="tooltip" data-placement="top" title="金融数据智能分析平台">
+                        Next<br>
+                        <span>金融数据智能分析平台</span>
+                        </a>
+                    </li>
+                    
+                </ul>
+
+
+                
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread"
+                        data-thread-key="/2017/07/19/beta"
+                        data-title="Beta对冲"
+                        data-url="http://0.0.0.0:4000/2017/07/19/beta/" >
+                    </div>
+                </div>
+                <!-- 多说评论框 end -->
+                
+
+                
+
+            </div>
+
+    <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+                    
+                        <li><a href="http://lingyu.wang/">天镶的博客</a></li>
+                    
+                        <li><a href="http://hmqk1995.github.io">Luke的自留地</a></li>
+                    
+                        <li><a href="http://ebnbin.com/">Ebn's Blog</a></li>
+                    
+                        <li><a href="http://blog.smdcn.net">SmdCn's Blog</a></li>
+                    
+                        <li><a href="http://xieminis.me/">解旻的博客</a></li>
+                    
+                        <li><a href="http://dhong.co">DHong Say</a></li>
+                    
+                        <li><a href="http://ingf.github.io/">尹峰以为</a></li>
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    // dynamic User by Hux
+    var _user = 'huxblog';
+
+    // duoshuo comment query.
+    var duoshuoQuery = {short_name: _user };
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+                    
+
+                    <!-- add Weibo, Zhihu by Hux, add target = "_blank" to <a> by Hux -->
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/bingjie-gao">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/446101575@qq.com">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/Bingjie Gao">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://github.com/wanwan507">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Bingjie Blog 2017
+                    <br>
+                    Theme © <a href="http://mkxkx.top">Diane</a> |
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=huxpro&repo=huxpro.github.io&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js "></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+        hljs.initHighlightingOnLoad();
+    })
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+<!--fastClick.js -->
+<script>
+    async("http://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        // var $nav = document.querySelector("nav");
+        // if($nav) FastClick.attach($nav);
+
+        // global FastClick!!
+        FastClick.attach(document.body);    
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-49627206-1';
+    var _gaDomain = 'mkxkx.top';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = '4cc1f2d8f3067386cc5cdb626a202900';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

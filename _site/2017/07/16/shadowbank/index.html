@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="关于深度学习与量化交易、黑客与画家 | 高冰洁，Deep Learning & Quantitive Analysis，Nature Language Processing，Machine Learning | 这里是 @Diane冰洁 的个人博客，与你一起发现更大的世界。">
+    <meta name="keyword"  content="冰洁, Diane冰洁, Diane, Trader, Bingjie, @bingjie, 冰洁的博客, Bingjie Blog, 博客, 个人网站, 互联网, 人工智能, 深度学习, 自然语言处理, 量化投资, 风险对冲, 一个向往远方的小白">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>何谓影子银行？ - 冰洁的博客 | Bingjie Blog</title>
+
+    <link rel="canonical" href="http://0.0.0.0:4000/2017/07/16/shadowbank/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="http://cdn.staticfile.org/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Bingjie Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/about/">About</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/portfolio/">Portfolio</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/tags/">Tags</a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    var __HuxNav__ = {
+        close: function(){
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        },
+        open: function(){
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+
+    // Bind Event
+    $toggle.addEventListener('click', function(e){
+        if ($navbar.className.indexOf('in') > 0) {
+            __HuxNav__.close()
+        }else{
+            __HuxNav__.open()
+        }
+    })
+
+    /**
+     * Since Fastclick is used to delegate 'touchstart' globally
+     * to hack 300ms delay in iOS by performing a fake 'click',
+     * Using 'e.stopPropagation' to stop 'touchstart' event from 
+     * $toggle/$collapse will break global delegation.
+     * 
+     * Instead, we use a 'e.target' filter to prevent handler
+     * added to document close HuxNav.  
+     *
+     * Also, we use 'click' instead of 'touchstart' as compromise
+     */
+    document.addEventListener('click', function(e){
+        if(e.target == $toggle) return;
+        if(e.target.className == 'icon-bar') return;
+        __HuxNav__.close();
+    })
+</script>
+
+
+    <!-- Image to hack wechat -->
+<!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="/img/post-bg-os-metro.jpg" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/post-bg-os-metro.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                    </div>
+                    <h1>何谓影子银行？</h1>
+                    
+                    
+                    <h2 class="subheading">索罗斯说中国影子银行系统已失控</h2>
+                    
+                    <span class="meta">Posted by Diane on July 16, 2017</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+				<h2 id="前言">前言</h2>
+
+<p><a href="#build">这是一个简单而又痛苦的开始…</a></p>
+
+<p>很久之前就学习了python但是一直没有做一个系统性的总结，最近开了博客就总结下。</p>
+
+<p id="build"></p>
+<hr />
+<h2 id="正文">正文</h2>
+
+<p>"影子银行”，正如其名，就像影子一样模仿着银行的一举一动，但却又没有具体的形体。对于影子银行，并没有一个放之四海而皆准的定义。
+</p>
+<p>
+国际组织金融稳定委员会(Financial Stability Board)在2011年4月的一份报告中将其定义为“正常银行监管系统之外作为信用中介而运行的机构或者交易行为” （“credit intermediation involving entities and activities (fully or partially) outside the regular banking system”）然而，Stijn Claessens 和 Lev Ratnovski两位学者并不认同这个定义，他们认为，金融稳定委员会的定义一方面“误伤”了对冲基金、资产管理公司等受到一定程度监管、一般不认为是“影子银行”的金融机构；另一方面，一些国家的银行本身也在开展类似影子银行的业务，例如资产证券化、回购业务等。尽管定义上有差异，但大方向上，只要看到两点特征，就可以大致称之为“影子银行”：</p>
+
+<ul>
+<li>1. 从事类似银行的业务；</li>
+<li>2. 游离于银行监管体系外。</li>
+</ul>
+
+<p>
+--银行的业务，万变不离其宗，无非就是在时间和空间的维度倒腾钱，把未来的钱倒腾到现在用，把通过吸存来取得的钱用于放贷用。这样的业务模式就会产生最致命的一点风险：期限错配（Maturity Mismatch）。银行吸收了大量的短期存款，储户随时有可能要求取款，但却要用这样的短期存款去支撑长期的放贷，这样长短期限的差异，就可能导致银行长期贷款没收回来，却要应对迫在眉睫的取款需求。这也就意味着，银行不可能将全部存款都用于长期放贷，必须留出一部分准备金用于应对取款，否则就可能导致“钱荒”。钱荒不是银行真的资不抵债了，而是缺乏流动性资金，储户担心不能随时取回存款，于是争先恐后冲向银行，加剧钱荒，所以人们说银行挤兑是一种“自我实现的预言”。除了上面所说的流动性风险之外，银行业务还产生另外一种风险，系统性风险。当银行和其他机构之间互负债务债权关系，或者互相持有对方的产品时，一家机构的的违约，就可能导致与之联系的其他机构受到冲击，导致危机在系统中蔓延。
+</p>
+<p>
+“影子银行”：影子银行的业务，也是在拿时间来变戏法。举个例子：有种很传统的资产证券化产品，叫做资产支持证券(Asset Backed Security),就是将未来的现金流打包起来放到现在卖。我做小生意，一年能赚一万块，五年有五万块入账，那么资产支持证券的发行者就可以找到我说：“给你四万块，未来五年的现金流都流到我口袋里好了”，这就是用把未来的预期收益一下子挪到现在来买卖。而发行者可以把买回来的收益权打包成证券，找到其他的投资者，你五块我十块，购买这样的证券并许诺投资回报。这样的套路，类似于银行面向公众吸收存款，发放贷款，赚取存贷款利息差。以资产支持证券这种基本款的产品为蓝本，还可以衍生出很多其他的变体，例如抵押贷款证券(Mortgage Backed Security),这就是讲将未来贷款的还款现金流打包成证券来发行。 甚至连投资这类证券的预期收益，也可以继续打包成资产，在上面一层一层叠上去。也就是说，不仅做生意的预期收益可以用于作为资产来做成证券化产品，就连投资证券化产品的收益，也可以再次打包成证券。不管怎么挪，期限错配问题和随之而来的流动性风险依然存在。</p>
+
+<p>以美国次贷危机为例，抵押贷款证券的收益来源于贷款买房者在未来的还款，当这笔还款落空的时候，就无法向投资者支付投资收益。这就类似于银行的长期贷款出现了坏账。然而，银行有了一笔坏账，还可以用自有资金去满足偿付的需求，而资产证券化产品则缺乏这样一个安全垫。（这也就是为什么后来的多德弗兰克法案强调发行者自己持有一部分产品，目的就是要像银行的准备金一样，提供吸收违约影响的缓冲区）。流动性风险依然存在，系统性风险还更高了。银行贷款毕竟还不能轻而易举地来回倒手，而证券产品可以很灵活地来回买卖。而且，一家机构的资产，很有可能被打包成产品，为另一家机构所持有，这就将大家都捆成了一条绳上的蚂蚱。风险并没有减少，但监管却少了，没有类似于准备金之类的强制性要求，也没有充足的信息披露，这就是为什么人们说起“影子银行”谈虎色变的原因之一。--以上举了金融衍生品的例子</p>
+
+<p>但影子银行的具体表现形式远不限于此。说一个东西是不是影子银行，寻本溯源，还是要把握一开始说的两点：</p>
+<ul>
+<li>1. 从事类似银行的业务；</li>
+<li>2. 游离于银行监管体系外。</li>
+</ul>
+
+<p>这样说来，经营民间借贷的地下钱庄、小额贷款公司，担保公司等可以是影子银行；理财产品和信托业务，可以是影子银行。影子银行不一定是多么高大上的金融创新，有一种“影子银行”已经存在了几百上千年：当铺。典当，不就是一种原始的抵押贷款嘛。--影子银行未必是坏的，它能提高资金配置的效率，降低获得资金的门槛。举个例子：在存在利率管制的情况下，银行无论是贷给大企业还是小企业，赚取的贷款利息不会有太大差别，但两者的风险和管理成本却有天壤之别。在不允许银行对两者分别制定不同利息的情况下，您说，银行会偏好向谁贷款呢？影子银行，则能够突破这样的限制，给风险水平不同的贷款定下不同的利息水平，这就是一种对分配效率的改善。
+</p>
+<p>–参考文献：Simin Gao &amp; Qianyu Wang, Chasing the Shadow in Different Worlds: Shadow Banking and its Regulation in the U.S. and China, Manchester Journal of International Economic Law , 2016 , 11 (3) :421-458</p>
+
+<p>作者：王瑞恩
+链接：https://www.zhihu.com/question/19594906/answer/198995627
+来源：知乎</p>
+
+<p>影子银行大致可以说是不通过银行直接发放的贷款。
+具体包括：1、投资于企业贷款资产的银行理财产品。一般是投资于高信用等级企业贷款资产，比如大型央企贷款或者应收账款。2、房地产信托、房地产私募。向个人及机构投资者募集资金发放，这是近两年房地产公司的主要融资手段，包括万科恒大等龙头房企都广泛使用。3、债权类信托、私募基金，以及附加回购协议的各类信托、私募基金。投资方向可以说是千奇百怪，矿产资源类企业是比较常见的，还出现了艺术品、红酒等等。4、近年来如雨后春笋涌现的小额贷款公司、担保公司。5、民间集资、私人借贷。如沿海地区常见的所谓“标会”的集资借贷。</p>
+
+<p>作者：garhom
+链接：https://www.zhihu.com/question/19594906/answer/15199988
+来源：知乎</p>
+
+<h2 id="后记">后记</h2>
+
+<p>看到知乎上关于影子银行的讨论，觉得很有趣，就搬过来总结下。</p>
+
+
+                <hr>
+
+                
+                <!-- 多说 Share start -->
+                </style>
+                <div class="ds-share"
+                    style="text-align: right"
+                    data-thread-key="/2017/07/16/shadowbank"
+                    data-title="何谓影子银行？"
+                    data-url="http://0.0.0.0:4000/2017/07/16/shadowbank/"
+                    data-images="http://0.0.0.0:4000/img/post-bg-os-metro.jpg"
+                    data-content="前言
+
+这是一个简单而又痛苦的开始…
+
+很久之前就学习了python但是一直没有做一个系统性的总结，最近开了博客就总结下。
+
+
+
+正文
+
+"影子银行”，正... | 冰洁的博客 | Bingjie Blog " >
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat flat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo flat" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban flat" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- 多说 Share end-->
+                
+
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2017/07/15/python-1/" data-toggle="tooltip" data-placement="top" title="为什么在执行八皇后程序的时候python比c++慢那么多">
+                        Previous<br>
+                        <span>为什么在执行八皇后程序的时候python比c++慢那么多</span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2017/07/17/mulitiporcess/" data-toggle="tooltip" data-placement="top" title="PYTHON多进程总结">
+                        Next<br>
+                        <span>PYTHON多进程总结</span>
+                        </a>
+                    </li>
+                    
+                </ul>
+
+
+                
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread"
+                        data-thread-key="/2017/07/16/shadowbank"
+                        data-title="何谓影子银行？"
+                        data-url="http://0.0.0.0:4000/2017/07/16/shadowbank/" >
+                    </div>
+                </div>
+                <!-- 多说评论框 end -->
+                
+
+                
+
+            </div>
+
+    <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+                    
+                        <li><a href="http://lingyu.wang/">天镶的博客</a></li>
+                    
+                        <li><a href="http://hmqk1995.github.io">Luke的自留地</a></li>
+                    
+                        <li><a href="http://ebnbin.com/">Ebn's Blog</a></li>
+                    
+                        <li><a href="http://blog.smdcn.net">SmdCn's Blog</a></li>
+                    
+                        <li><a href="http://xieminis.me/">解旻的博客</a></li>
+                    
+                        <li><a href="http://dhong.co">DHong Say</a></li>
+                    
+                        <li><a href="http://ingf.github.io/">尹峰以为</a></li>
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    // dynamic User by Hux
+    var _user = 'huxblog';
+
+    // duoshuo comment query.
+    var duoshuoQuery = {short_name: _user };
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+                    
+
+                    <!-- add Weibo, Zhihu by Hux, add target = "_blank" to <a> by Hux -->
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/bingjie-gao">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/446101575@qq.com">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/Bingjie Gao">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://github.com/wanwan507">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Bingjie Blog 2017
+                    <br>
+                    Theme © <a href="http://mkxkx.top">Diane</a> |
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=huxpro&repo=huxpro.github.io&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js "></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+        hljs.initHighlightingOnLoad();
+    })
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+<!--fastClick.js -->
+<script>
+    async("http://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        // var $nav = document.querySelector("nav");
+        // if($nav) FastClick.attach($nav);
+
+        // global FastClick!!
+        FastClick.attach(document.body);    
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-49627206-1';
+    var _gaDomain = 'mkxkx.top';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = '4cc1f2d8f3067386cc5cdb626a202900';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

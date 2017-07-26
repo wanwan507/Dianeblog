@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="关于深度学习与量化交易、黑客与画家 | 高冰洁，Deep Learning & Quantitive Analysis，Nature Language Processing，Machine Learning | 这里是 @Diane冰洁 的个人博客，与你一起发现更大的世界。">
+    <meta name="keyword"  content="冰洁, Diane冰洁, Diane, Trader, Bingjie, @bingjie, 冰洁的博客, Bingjie Blog, 博客, 个人网站, 互联网, 人工智能, 深度学习, 自然语言处理, 量化投资, 风险对冲, 一个向往远方的小白">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>金融数据智能分析平台 - 冰洁的博客 | Bingjie Blog</title>
+
+    <link rel="canonical" href="http://0.0.0.0:4000/2017/07/26/financial-dataplatform/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="http://cdn.staticfile.org/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Bingjie Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/about/">About</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/portfolio/">Portfolio</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/tags/">Tags</a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    var __HuxNav__ = {
+        close: function(){
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        },
+        open: function(){
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+
+    // Bind Event
+    $toggle.addEventListener('click', function(e){
+        if ($navbar.className.indexOf('in') > 0) {
+            __HuxNav__.close()
+        }else{
+            __HuxNav__.open()
+        }
+    })
+
+    /**
+     * Since Fastclick is used to delegate 'touchstart' globally
+     * to hack 300ms delay in iOS by performing a fake 'click',
+     * Using 'e.stopPropagation' to stop 'touchstart' event from 
+     * $toggle/$collapse will break global delegation.
+     * 
+     * Instead, we use a 'e.target' filter to prevent handler
+     * added to document close HuxNav.  
+     *
+     * Also, we use 'click' instead of 'touchstart' as compromise
+     */
+    document.addEventListener('click', function(e){
+        if(e.target == $toggle) return;
+        if(e.target.className == 'icon-bar') return;
+        __HuxNav__.close();
+    })
+</script>
+
+
+    <!-- Image to hack wechat -->
+<!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="/img/post-bg-sightview.jpg" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/post-bg-sightview.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                    </div>
+                    <h1>金融数据智能分析平台</h1>
+                    
+                    
+                    <h2 class="subheading">一个简单的数据展示和模型集成web平台</h2>
+                    
+                    <span class="meta">Posted by Diane on July 26, 2017</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+				<h2 id="前言">前言</h2>
+
+<p><a href="#build">感冒依旧没有好…</a></p>
+
+<p>总结一下实习期间搭建的一个金融数据智能分析平台</p>
+
+<p id="build"></p>
+<hr />
+<h2 id="正文">正文</h2>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<blockquote>1.	服务器端：</blockquote>
+<li>flask http://flask.pocoo.org/ </li>
+<pre><code>轻量级的Python Web框架
+</code></pre>
+<li>pandas http://pandas.pydata.org/ </li>
+<pre><code>Python的数据结构和数据分析工具包，提供数据处理的Wrangling的功能
+</code></pre>
+<li>sklearn http://scikit-learn.org/ </li>
+<pre><code>非常流行的Python机器学习包，依赖于numpy，scipy和matplotlib
+</code></pre>
+
+<blockquote>2.	客户端:</blockquote>
+<li>jquery</li>
+<pre><code>reactjs http://facebook.github.io/react/ 
+facebook开发的js UI框架，基于组件（component）而非mvc
+</code></pre>
+<li>d3js https://d3js.org/ </li>
+<pre><code>数据驱动的DOM操纵库，可以创建丰富的数据可视化呈现。
+</code></pre>
+<li>echarts http://www.oschina.net/p/echarts </li>
+<pre><code>百度开发的数据可视化库，基于canvas技术，功能丰富。实为中国开源项目的翘楚。
+</code></pre>
+<li>bootstrap http://getbootstrap.com/ </li>
+<pre><code>twitter开发的前端框架，非常流行。
+</code></pre>
+<li>jquery datatables  http://www.datatables.net/ </li>
+<pre><code>非常实用的基于jquery的表格控件
+</code></pre>
+<li>bootstrap fielinput https://github.com/kartik-v/bootstrap-fileinput </li>
+<pre><code>HTML5文件上传控件
+</code></pre>
+<li>papaparse https://github.com/mholt/PapaParse </li>
+<pre><code>CSV文件的JS解析
+</code></pre>
+<li>requirejs http://www.requirejs.org/ </li>
+<pre><code>JS 依赖管理
+</code></pre>
+<li>select2  https://select2.github.io/ </li>
+<pre><code>基于jquery的select控件
+</code></pre>
+
+<blockquote>3.	开发构建工具</blockquote>
+<li>nodejs https://nodejs.org/en/ </li>
+<li>babel https://babeljs.io/ </li>
+<p>javascript的编译器，支持把ES6的代码转换成浏览器可执行的代码，这里主要是为了支持reactjs使用的jsx的编译。运行financial_dataplatform非常简单，下载github上的code后，建议安装anaconda2，所有的Python2.7依赖就都准备好了，进入financial_dataplatform/package目录，运行：python main.py
+以下步骤在只有js源文件而没有lib文件夹情况下才需要进行，而github中含有所有需要的文件，所以下述命令都不需要进行。</p>
+<p>在只有js文件夹的情况下，因为react的js需要编译，需要运行如下的命令用babel进行js的转码才能运行，具体命令如下：</p>
+<pre><code>## install node first&lt;/br&gt;
+## cd package/static&lt;/br&gt;
+npm install -g babel-cli&lt;/br&gt;
+npm install babel-preset-es2015 --save&lt;/br&gt;
+npm install babel-preset-react --save&lt;/br&gt;
+babel --presets es2015,react --watch js/ --out-dir lib/&lt;/br&gt;
+</code></pre>
+<p>大家也可以参考package/static/package.json了解需要的依赖。有时间需要集成一个更简单的build脚本来做这些事情。生成的JS文件在lib目录下。当修改了js／文件夹下的js文件之后也需要执行上一条babel命令完成转码，然后在浏览器中键入 localhost:5000启动客户端。</p>
+
+<blockquote>4.	接下来介绍两部分功能：</blockquote>
+<p>数据上传用到了file input控件，数据表用了datatable控件。为了方便CSV文件直接存贮在本地文件系统中。后台用pandas对csv文件进行处理。前台用Rest API读取csv文件，然后用papaparse解析后，展现在数据表中。更好的做法是在后台用Python对CSV文件作解析。注意这里对上传的CSV文件有严格的要求，必须有首行的header，末尾不能有空行。</p>
+<p>有了数据后，就可以开始做分析了。首先我们看看可视化的分析。点击菜单Analysis／Visualization。可视化这一块的主要工作是从CSV的表结构数据，根据数据绑定，变形到echart的数据结构。因为echart并没有一个统一的数据模型，所以每一个类型的图表都需要有对应的数据变形的逻辑 。（代码 package/static/js/visualization ）现在主要的做了Pie，Bar，Line，Treemap，Scatter， Area这几种chart。现在用下来感觉echart优缺点都很明显，他提供的辅助功能很好，可以方便的增加辅助线，note，存贮为图形等。但是由于缺乏统一的数据模型扩展起来比较麻烦，接下来试用一下plotly，当然highchart是非常成熟的图表库。</p>
+<p>除了基于可视化的分析功能，还有机器学习的功能。分类的算法可以使用KNN，Bayes和SVM。聚类算法现在实现了Kmeans。回归实现了线性回归和逻辑回归。</p>
+
+<blockquote>5.	接下来可以进一步实现的功能：</blockquote>
+<li>数据源</li>
+<p>现在的数据源只有CSV文件和数据库，可以考虑更多的数据源支持，例如数据仓库，REST调用，流等等。</p>
+<li>数据模型</li>
+<p>现在的数据模型比较简单，就是pandas的dataframe或者一个简单的cvs的表结构。可以考虑引入数据库。另外还需要增加对层级数据（hierachical）的支持</p>
+<li>数据变形</li>
+<p>数据变形是数据分析的必要准备工作。业内有很多专注于数据准备的产品，例如paxata,trifacta。现有的平台没有任何的数据变形和准备的功能，其实pandas有非常丰富的data wrangling的功能，我希望能在这之上包装一个data wrangling的DSL，可以让用户快速的进行数据准备。</p>
+<li>可视化库</li>
+<p>Baidu的echart是非常优秀的可视化库，可是用于数据探索时，还不够好。希望能有一套类似ggplot的前端可视化库来使用。另外地图功能和层级化的图表也是数据分析常见的功能。</p>
+<li>仪表盘功能</li>
+<p>这个没有仪表盘功能，这个功能是数据分析软件的标配。pyxley似乎是个不错的选择，也和dataplay的架构一致（python，reactjs）。</p>
+<li>机器学习和预测</li>
+<p>现在实现了最简单的一些机器学习和深度学习的算法，我觉得方向应该是面向用户，变得更简单，用户只给出简单的选项，例如要预测的目标属性，和用于预测的属性，然后自动的选择算法。另外需要更方便的对算法进行扩展。未来可以进一步拓展GPU的支持。</p>
+
+<h2 id="后记">后记</h2>
+
+<p>下一篇介绍系统的数据库分析平台搭建方式。</p>
+
+
+                <hr>
+
+                
+                <!-- 多说 Share start -->
+                </style>
+                <div class="ds-share"
+                    style="text-align: right"
+                    data-thread-key="/2017/07/26/financial-dataplatform"
+                    data-title="金融数据智能分析平台"
+                    data-url="http://0.0.0.0:4000/2017/07/26/financial-dataplatform/"
+                    data-images="http://0.0.0.0:4000/img/post-bg-sightview.jpg"
+                    data-content="前言
+
+感冒依旧没有好…
+
+总结一下实习期间搭建的一个金融数据智能分析平台
+
+
+
+正文
+
+
+1.	服务器端：
+flask http://flask.poc... | 冰洁的博客 | Bingjie Blog " >
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat flat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo flat" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban flat" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- 多说 Share end-->
+                
+
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2017/07/19/beta/" data-toggle="tooltip" data-placement="top" title="Beta对冲">
+                        Previous<br>
+                        <span>Beta对冲</span>
+                        </a>
+                    </li>
+                    
+                    
+                </ul>
+
+
+                
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread"
+                        data-thread-key="/2017/07/26/financial-dataplatform"
+                        data-title="金融数据智能分析平台"
+                        data-url="http://0.0.0.0:4000/2017/07/26/financial-dataplatform/" >
+                    </div>
+                </div>
+                <!-- 多说评论框 end -->
+                
+
+                
+
+            </div>
+
+    <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+                    
+                        <li><a href="http://lingyu.wang/">天镶的博客</a></li>
+                    
+                        <li><a href="http://hmqk1995.github.io">Luke的自留地</a></li>
+                    
+                        <li><a href="http://ebnbin.com/">Ebn's Blog</a></li>
+                    
+                        <li><a href="http://blog.smdcn.net">SmdCn's Blog</a></li>
+                    
+                        <li><a href="http://xieminis.me/">解旻的博客</a></li>
+                    
+                        <li><a href="http://dhong.co">DHong Say</a></li>
+                    
+                        <li><a href="http://ingf.github.io/">尹峰以为</a></li>
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    // dynamic User by Hux
+    var _user = 'huxblog';
+
+    // duoshuo comment query.
+    var duoshuoQuery = {short_name: _user };
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+                    
+
+                    <!-- add Weibo, Zhihu by Hux, add target = "_blank" to <a> by Hux -->
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/bingjie-gao">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/446101575@qq.com">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/Bingjie Gao">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://github.com/wanwan507">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Bingjie Blog 2017
+                    <br>
+                    Theme © <a href="http://mkxkx.top">Diane</a> |
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=huxpro&repo=huxpro.github.io&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js "></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+        hljs.initHighlightingOnLoad();
+    })
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+<!--fastClick.js -->
+<script>
+    async("http://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        // var $nav = document.querySelector("nav");
+        // if($nav) FastClick.attach($nav);
+
+        // global FastClick!!
+        FastClick.attach(document.body);    
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-49627206-1';
+    var _gaDomain = 'mkxkx.top';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = '4cc1f2d8f3067386cc5cdb626a202900';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
