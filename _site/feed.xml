@@ -5,8 +5,8 @@
     <description>关于深度学习与量化交易、黑客与画家 | 高冰洁，Deep Learning &amp; Quantitive Analysis，Nature Language Processing，Machine Learning | 这里是 @Diane冰洁 的个人博客，与你一起发现更大的世界。</description>
     <link>http://0.0.0.0:80/</link>
     <atom:link href="http://0.0.0.0:80/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Mon, 30 Oct 2017 21:33:04 +0800</pubDate>
-    <lastBuildDate>Mon, 30 Oct 2017 21:33:04 +0800</lastBuildDate>
+    <pubDate>Mon, 30 Oct 2017 21:40:47 +0800</pubDate>
+    <lastBuildDate>Mon, 30 Oct 2017 21:40:47 +0800</lastBuildDate>
     <generator>Jekyll v3.5.0</generator>
     
       <item>
@@ -34,14 +34,7 @@
 
 &lt;p&gt;####alpha zero中的强化学习&lt;/p&gt;
 
-&lt;table&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;新方法使用深度神经网络参数Fθ（θ）。该神经网络作为输入，其历史地位的原始表示，移动和输出概率，和一个值（p，v）= Fθ（S）。转移概率向量代表选择每一步的概率（包括通过），PA = PR(a&lt;/td&gt;
-      &lt;td&gt;S）。v值是一个标量估计，估计当前玩家从位置S中获胜的概率。这个神经网络将策略网络和价值网络的角色结合成一个单一的体系结构。&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+&lt;p&gt;新方法使用深度神经网络参数Fθ（θ）。该神经网络作为输入，其历史地位的原始表示，移动和输出概率，和一个值（p，v）= Fθ（S）。转移概率向量代表选择每一步的概率（包括通过），PA = PR(a/S）。v值是一个标量估计，估计当前玩家从位置S中获胜的概率。这个神经网络将策略网络和价值网络的角色结合成一个单一的体系结构。&lt;/p&gt;
 
 &lt;p&gt;在alphago zero 的神经网络是由一种新型的强化学习算法训练自我发挥的游戏。在每一个位置，一个能执行搜索，通过神经网络θ引导F。MCTS搜索输出概率π玩的每一个动作。这些搜索概率通常选择更强的动作比原移动概率神经网络的Fθ（S）；MCTS可能因此被看作是一个强大的政策改进算子。采用改进的基于策略的选择MCTS每个移动搜索，然后用游戏的赢家Z为价值–样品可以被看作是一个强有力的策略评价算子。强化学习算法的主要思想是在策略迭代程序重复使用搜索操作符：神经网络的参数进行更新，使转移概率值（p，v）= Fθ（S）更密切地配合改进的搜索概率和自我发挥的赢家（π，Z）；这些使用新的参数在自我的下一次迭代的发挥使搜索更强大。图1展示了自播放训练流水线。&lt;/p&gt;
 
