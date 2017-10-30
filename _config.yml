@@ -19,7 +19,7 @@ github_username:    wanwan507
 facebook_username:  Bingjie Gao
 
 host: 0.0.0.0
-port: 4000
+port: 80
 
 
 # Build settings
