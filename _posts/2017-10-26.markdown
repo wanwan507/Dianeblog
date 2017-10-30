@@ -5,10 +5,18 @@ date:       2017-10-30 12:00:00
 author:     "Diane"
 header-img: "img/post-alpha-zero.jpg"
 tags:
-    - 增强学习
-    - 深度学习
+
 ---
 
+
+## 前言
+
+[很久没有更新了...](#build) 
+
+
+<p id = "build"></p>
+
+---
 ##阅读alpha zero笔记
 
 ####什么是alpha zero
