@@ -3,7 +3,7 @@ layout:     post
 title:      "深度学习巨头Yann Lecun 中科院自动化所座谈及清华大学讲座"
 date:       2017-07-14 12:00:00
 author:     "Diane"
-header-img: "img/post-1.jpg"
+header-img: "img/post-alpha-zero.jpg"
 tags:
     - 知乎
     - 深度学习
