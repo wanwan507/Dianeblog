@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="关于深度学习与量化交易、黑客与画家 | 高冰洁，Deep Learning & Quantitive Analysis，Nature Language Processing，Machine Learning | 这里是 @Diane冰洁 的个人博客，与你一起发现更大的世界。">
+    <meta name="keyword"  content="冰洁, Diane冰洁, Diane, Trader, Bingjie, @bingjie, 冰洁的博客, Bingjie Blog, 博客, 个人网站, 互联网, 人工智能, 深度学习, 自然语言处理, 量化投资, 风险对冲, 一个向往远方的小白">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>东方证券金工研报阅读 - 冰洁的博客 | Bingjie Blog</title>
+
+    <link rel="canonical" href="http://0.0.0.0:80/2017/08/04/east-financial-report/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="http://cdn.staticfile.org/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Bingjie Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/about/">About</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/portfolio/">Portfolio</a>
+                    </li>
+                    
+                    <li>
+                        <a href="/tags/">Tags</a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    var __HuxNav__ = {
+        close: function(){
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        },
+        open: function(){
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+
+    // Bind Event
+    $toggle.addEventListener('click', function(e){
+        if ($navbar.className.indexOf('in') > 0) {
+            __HuxNav__.close()
+        }else{
+            __HuxNav__.open()
+        }
+    })
+
+    /**
+     * Since Fastclick is used to delegate 'touchstart' globally
+     * to hack 300ms delay in iOS by performing a fake 'click',
+     * Using 'e.stopPropagation' to stop 'touchstart' event from 
+     * $toggle/$collapse will break global delegation.
+     * 
+     * Instead, we use a 'e.target' filter to prevent handler
+     * added to document close HuxNav.  
+     *
+     * Also, we use 'click' instead of 'touchstart' as compromise
+     */
+    document.addEventListener('click', function(e){
+        if(e.target == $toggle) return;
+        if(e.target.className == 'icon-bar') return;
+        __HuxNav__.close();
+    })
+</script>
+
+
+    <!-- Image to hack wechat -->
+<!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="/img/post-bg-kuaidi.jpg" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/post-bg-kuaidi.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                    </div>
+                    <h1>东方证券金工研报阅读</h1>
+                    
+                    
+                    <h2 class="subheading">一个简单的总结</h2>
+                    
+                    <span class="meta">Posted by Diane on August 4, 2017</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+				<h2 id="前言">前言</h2>
+
+<p><a href="#build">感冒依旧没有好…</a></p>
+
+<p>总结一下昨天晚上看的8篇研报</p>
+
+<p id="build"></p>
+<hr />
+<h2 id="正文">正文</h2>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+<p>
+多因子选股模型的整个投资流程包括 alpha 模型的构建，风险模型的构建， 交易成本模型的构建，投资组合优化过程以及组合业绩的归因分析。从国内 市场上已公开的量化模型看，采取的大多是打分法选股或者行业、市值分层 构建组合，这种组合构建方式缺乏对风险和 alpha 的精确控制，最终组合可 能偏离预定的投资目标。</p>
+
+<p>多因子结构化风险模型(如 Barra, Axioma)目前仍然是市场上的主流风险模型。</p>
+
+<p>构建了alpha模型和交易成本模型，并且在不同的样本空间内进行 投资组合优化回溯测试，实证检验表明基于压缩估计量风险模型构建的组合 能够获得比采用简单分层方法构建的组合更高的风险调整后收益和更低的 换手率，同时，投资组合的优化过程也提供了对组合的权重分配、换手率进 行动态微调的机会。</p>
+
+<p>对于指数增强基金，我们检验得出传统上的行业中性处理已经能够把组合的 跟踪误差控制在一个相对较小的范围内，而基于压缩估计量构建的风险模型 能够更加精确地控制组合事后跟踪误差，这可以满足指数增强基金经理对组 合主动风险进行精确控制的要求。</p>
+
+<blockquote>1.多因子模型投资流程</blockquote>
+<p>近年来, 多因子选股策略在国内市场上已经得到了较为广泛的应用，国内各机构也对阿尔法因子的 挖掘和多因子阿尔法模型的构建有了较为充分的研究。但是类似研究在构建组合时大多采取的都是 相对固定的模式，例如通过分层来构造行业中性和市值中性的组合。这类相对主观的调整难以顾及 个股之间和行业之间的关联性，缺乏对组合风险的精确控制，导致最终构建的组合可能并没有充分 暴露在预设的阿尔法因子上。</p>
+
+<p>风险模型是投资组合优化过程中非常重要的一个组成环节，风险模型旨在捕捉不同股票个体波动性 差异大小和股票之间波动相关性的大小，对股票未来价格的波动进行预测。目前风险模型有如下几种:</p>
+<p>1. 样本协方差矩阵:在资产收益率多元正态分布的假定下，样本协方差矩阵是总体协方差矩阵的 无偏估计量。当投资组合中有 N 个资产时，需要估计的波动率个数为 N，需要估计的协方差 个数为 N(N-1)/2。</p>
+
+<p>2. 基本面因子模型:目前较为主流的风险模型当属这一类，而且市场上有非常成熟的商业化解决 方案(MSCI Barra, Axioma, Northfield)。在基本面因子模型中，股票收益的系统性风险部分 能够被一组公共的因子所解释。</p>
+
+<p>3. 宏观因子模型:宏观因子模型与基本面因子模型类似，也是通过一组公共因子来解释股票收益 的系统性风险，比如通货膨胀率，GDP 增长率，利率等。区别主要在于在宏观因子模型中， 我们已知的是每个因子在每一期的因子收益率，而每个股票在这些公共因子上的暴露需要通过 较长历史区间的时间序列回归进行估计。</p>
+
+<p>4. 统计因子模型: 统计因子模型主要是利用主成分分析从股票收益率样本协方差矩阵提取出一定数量的主成分，主成分的数量由对总方差的解释阈值所确定。类似于基本面因子模型，我们可以通过K个主成分来捕捉N个股票之间的波动情况，降低了需要估计参数的个数。</p>
+
+<p>
+在多因子选股量化投资流程中，阿尔法模型的优劣直接决定了投资组合是否能够获得稳健的超额收 益。 我们将在接下来的研究中深入探讨如何有效地构建多因子模型，本文只做初步介绍。我们对 东方金工因子库中的 7 大类 40 多个因子在中证全指样本空间内进行了因子显著性检验，为了避免 前视偏误(look ahead bias)，因子有效性检验的时间区间为 2006 年 1 月 1 日到 2010 年 12 月 31 日，通过综合考察因子 Rank IC、Rank IC 的 t 统计量、IR、IC 正显著比例、IC 负显著比例、 多空组合收益率、多空组合夏普比以及多空组合最大回撤等绩效指标，筛选出了如下因子作为阿尔 法模型的组成部分:</p>
+
+<p>我们在每个月末首先计算因子的原始值，然后对原始值做中位数去极值和标准化处理，再针对不同类型的因子做进一步的中性化处理:</p>
+<p>1. 财务类因子(价值、成长)做行业中性处理和风格中性处理，剔除行业和 Beta, 规模的影响。</p>
+<p>2. 对风险类因子中的换手率因子和技术因子做风格中性处理。剔除 Beta, 规模的影响。</p>
+<p>我们的目标是结合公司的基本面指标，风险指标和技术指标。投资逻辑是:购买具有相对低估值的 高成长公司，同时这些公司前期没有被市场过度炒作而高估，并且技术面上反映出这些公司的股价 已经出现超跌的现象。由于中国市场上小盘股效应较为明显，但波动较大，在alpha模型中应当适量控制对小盘股的暴露。</p>
+<p>接下来，可以采用不同的方法把多个因子的信息结合起来，构成合成因子。对于合成因子的构成，可以采用如下几种方式:</p>
+<p>1. 在同类因子内部采取等权重加权，构成每类的合成因子。然后对每类的合成因子采取等权重加权，组成综合的合成因子。最后再对合成因子做标准化处理。</p>
+<p>2. 在各个因子之间相关性较低的情况下可以利用单个因子的历史滚动IR进行加权，每个月动态 调整因子配比。</p>
+<p>3. 利用历史面板数据进行回归，因变量是股票的月度收益，自变量是经过处理后的因子值。利用最新一期的因子值和估计出的参数得到单个股票预期收益的预测值。</p>
+
+<p>交易成本也是多因子选股模型构建不可缺少的一环。交易成本与组合的权重变化和交易执行策略直接相关。交易成本通常可以分为固定成本和可变成本。固定成本包括交易佣金，印花税和买卖价差(bid-ask spread)。可变成本则包括冲击成本和机会成本。</p>
+
+<p>在估计出参数以后，我们就可以把交易成本嵌入到优化的目标函数中。由于参数的估计需要涉及到高频的数据，在本文的实证分析中只采用如下固定交易成本的简化假定:</p>
+<p>1. 买入交易成本 1.8‰(佣金 0.8‰ + 冲击成本 1.0‰)，卖出交易成本 2.8‰(佣金 0.8‰ + 印 花税 1.0‰ + 冲击成本 1.0‰)</p>
+<p>2. 假定每次买入金额等于卖出金额，参数  0.5*(2.8‰ + 1.8‰)= 2.4‰</p>
+
+<p>至此，我们已经完成了投资组合优化三大基石的构建:风险模型，alpha模型和交易成本模型。投资组合优化可以在精确控制组合风险的基础上，最大化组合对预定 alpha 因子的暴露，同时满足其他约束条件。</p>
+
+<blockquote>Alpha 模型之再认识</blockquote>
+<p>在之前的因子选股系系列报告中，我们系统地讨论了因子的检验、挑选和投资组合的构建问题。本 文将着重讨论如何有效的构建 Alpha 模型。首先需要明确的是，Alpha 模型的最终目标是在给定的 样本空间范围内稳定地预测股票未来收益率的排序，即把”好股票”和”坏股票”区分开来。构建 Alpha 模型最为核心的两个步骤是因子的挑选和不同因子之间权重的分配方式。</p>
+<p>然而，大多数传统 Alpha 模型的一个前提就是对全市场的股票进行一视同仁的打分，然后在全市 场进行排序。我们知道，不同个股的基本面属性可能存在非常大的区别。比如，对于一个低估值、 高ROE和大市值的蓝筹股，它在模型中与一个高估值、低 ROE 和小市值的成长股的可比性会大大降低，这也是传统上的基本面研究以行业或者市值作为划分标准的依据。</p>
+<p>为了解决这个问题，人们开始尝试对每个行业进行单独建模，比如利用各种统计方法检验在每个行业内区分能力最强的因子，利用对该行业有显著效果的因子给行业内的股票进行独立打分，然后再 汇总个股的得分或者排序，从而得到全市场的排序。</p>
+<p>这种方法在一定程度上弥补了全市场统一打分模型的缺陷，承认了个股之间的差异性和不可比性，增加了Alpha模型的广度(Breadth)。但它也存在几个重要的问题:</p>
+<p>1. 传统上的行业分类主要依据是公司收入的来源，而公司收入来源相似不代表公司的基本面完全一致。换句话说，公司收入来源不同(属于在不同的行业)也不代表公司的基本面不同，比如同一个成熟的技术类公司相比，一个高速成长的技术类公司可能和一个高速成长的生物医药公司基本面更为相似。</p>
+<p>2. 公司的行业属性相对稳定，但是公司的基本面并非是一成不变的。一个公司刚上市时，可能是属于小市值，高成长和高估值的成长股，但八到十年后，公司可能具有完全不同的基本面属性，比如已经成为一个大市值，高盈利和低估值的蓝筹股。单纯以行业作为划分依 据难以捕捉公司基本面随时间发生的变化。</p>
+<p>3. 同一个行业内的股票数量相对有限，统计检验出来的有效因子可能是对历史数据噪音的过度拟合，样本外的效果值得怀疑。</p>
+<p>为了解决上述两个问题，Sorenson, Hua and Qian (2005) 首先提出 Dynamic Contextual Alpha 的概念，中文叫做动态情景 Alpha 模型。这个模型摈弃了行业内打分的做法，转而根据股票基本面的属性，比如估值、成长和盈利能力等，把股票分成不同的层面，对每个层面内的股票采用单独 的评价体系进行打分或者排序，最后得到每个股票的综合得分。这个模型已经成功地被运用在波士 顿一家知名的量化资产管理公司-PanAgora Asset Management 的 Dynamic Equity Strategies 策略上，并且取得了优异的业绩。</p>
+
+<p>在DCA模型的构建中，首先需要考虑的是采用什么因子对股票进行分层。分层的目标是把具有相 似的基本面的股票聚集在一起，同时不同的分层应该能够刻画股票基本面上不同的属性，如规模、价值和成长性等。分层的理想结果是不同的 Alpha 因子在不同的分层(如大市值和小市值，高估值 和低估值)有着显著的绩效区别。最为简单粗暴的方法则是把每个因子都作为分层因子测试一遍， 统计其他因子的预测能力强度，选出综合区分能力最强的因子。但是这种方法缺乏事前逻辑的支撑， 容易掉入数据窥视偏差(Data-Snooping Bias)的陷阱.对历史数据过度拟合(overfitting).</p>
+<p>我们认为分层因子应当具有风险因子的特征，挑选的具体标准如下:</p>
+<p>1. 因子对市场风格的切换具有较强的捕捉能力，具体表现为Rank IC正负显著比例之和在 70% 以上。</p>
+<p>2. 因子本身应当相对稳定，具体表现为较高的线性自相关系数(85%以上)。不同分层因子之间的 因子值的横截面秩相关系数应当较低，能够在不同维度刻画股票的特征。</p>
+<p>3. 因子定义简单，逻辑明确，因子在样本空间的覆盖率高(95%以上)，同时应当覆盖所有行业。</p>
+
+<p>值得指出的是，由于沪深 300 指数的特殊性，情景 alpha 模型也并非一劳永逸的处理方式，对于 某些特殊的行业，如银行和非银行金融业，仍然需要开发专门的行业选股模型(Industry Model)。</p>
+
+<p>Alpha 是量化投资的基础概念，但实际使用时存在模糊的地方。通常在大众媒体和私人聊天中 用到的alpha，例如:“XX 基金的 alpha 很高”，实际上指的是相对基准超额收益的意思。而在组合 绩效分析中，股票组合收益可以分解为风险因子(市场因子、市值因子、估值因子等)带来的 beta 收益和不能被这些风险解释的 alpha 收益，随着风险因子的选择不同，计算得到的 alpha 也会不同; 如果任何风险都不控制，那么 alpha 就等于组合收益率。因此严格的来讲，对于不同的投资者，由 于风险控制的要求不一样，追求的 alpha 会有差别，只有在同一个风险控制要求下，比较不同策 略间的 alpha 才有意义。</p>
+
+<p>机器学习容易给人“黑箱模型”和“过拟合”的印象，但事实上一些机器学 习算法的逻辑和结果都非常直白，而且算法自身带有一套避免过拟合的参数 估计机制。众多的实践研究说明，机器学习方法的预测能力大部分情况下都 强于线性模型，很值得在量化投资中测试使用。本报告主要讲述机器学习的 基本原理和用其来做量化选股的实证结果。</p>
+<p>机器学习模型众多，不存在所谓的最强模型，不同的数据，不同的问题适用 不同的模型。我们测试了 LASSO、SVM、增强型决策树、随机森林等几种 常见机器学习方法，最终选择用随机森林，主要是因为它结构简单、参数少 过拟合概率低，同时还具有非常强的样本外预测能力。</p>
+
+<p>机器选股模型省去了“因子筛选”、“因子加权”和“ZSCORE 转收益率 这三个步骤，直接通过随机森林做回归，由 alpha 因子来预测收益率。需要 说明的是，决策树本身也可以用来做变量筛选，但是我们并没有把这一步交 给机器，而是仍然保留了“因子 IC 检验”这个步骤，保证随机森林的输入 变量确确实实是符合我们传统意义的 alpha 因子;如果把很多没有选股效用 的因子混在一起作为输入变量，会导致数据噪音过大，产生“ Garbage in, Garbageout” 的问题，降低模型的预测能力。</p>
+
+<p>实证结果显示，和传统 alpha 因子 IC_IR 加权方法相比，随机森林模型得到 的多空组合收益率和稳健性都更高，处理 alpha 因子间信息重叠的效果要比 我们之前报告提出的线性方法好。</p>
+
+<p>更经济实用的方法是找到一个预测能力还不错的 ML 模型，多花时间去寻找能提供独立信息源的 alpha 因子，改进数据特征提取方法。</p>
+
+<p>因子选股研究通常采用月频调仓模式，但是 Alpha 因子的效用并非在未来一 个月均匀分布，而是呈现逐步衰减的形态，也就是说我们从月初获得的 alpha 要比月末获得的 alpha 高，持仓一个月不动的调仓方式在当月后半段资金利 用效率较低，有必要在 alpha 衰退之前调仓。</p>
+<p>因子的alpha衰减速度可以用其IC的半衰期度量，基本面因子、估值因子的 衰减速度较慢，例如 CFP_TTM 指标的半衰期长达四个月;而技术类指标的 衰减速度较快，CGO_3M 指标 11 天左右 IC 即衰减了一半。</p>
+<p>实证发现，不论是做主动量化还是做指数增强组合，周频调仓方式在交易成本较低的情况表现都明显优于月频调仓组合，但当单边交易成本达到 0.5% 时，高频调仓带来的 alpha 增量将无法覆盖高换手带来的冲击成本，有必要人为主动控制换手率。</p>
+<p>控制换手会降低组合的总体换手率，节约交易成本，但同时也会损耗 alpha 当交易成本较低时，后者大于前者;交易成本较高时，前者大于后者。我们 实证发现即使人为控制换手，使得周频组合换手率降至月频调仓组合的水平，在不同交易成本设臵下，周频组合的表现都要明显优于月频调仓组合。</p>
+<p>周频调仓除了可以提升组合收益，也可以分散交易，降低冲击成本，增加策 略资金容量。报告里的测试方法完全可以用作日频调仓，但需要注意的是，交易频率越高，策略对交易水平的要求越高，算法交易是非常有必要的辅助工具。</p>
+
+<p>报告下文实证测试了周频调仓的因子选股策略效果，其操作方式完全可以提升到日频，但需要 说明的是交易频率越高，对交易水平要求也越高，交易员要能保证成交均价稳定在某个市场价格附 近。因此能使用算法交易程序的私募和券商自营等机构在高频 alpha 策略执行层面占据明显优势， 而目前公募和保险机构普遍采用的基金经理下达交易指令、交易员按委托下单的方式里面人为 不确 定因素较多，交易越频繁，累积的不确定性越高。另外，我们这里直接把月频 alpha 因子拿来做周 频交易，但事实可能存在一些周频有效，但月频无效的高频 alpha 因子，需要再去单独寻找验证。</p>
+
+<p>Alpha 因子的效用并非在时间上均匀分布，而是会随着时间衰减，技术类因子的衰减速度会明 显快于基本面因子，因此投资者应该提高交易频率，在 alpha 衰退之前调仓。高频调仓会带来高换 手，在交易成本较高的情况的下有必要人为控制换手率，我们实证研究发现不论是做主动量化组合 还是做指数增强，即使周频调仓组合的换手率控制得和月频一致，周频组合的表现也更好。周频调 仓方式不仅可以获得更高收益，而且可以分散交易，降低冲击成本，提升策略资金容量。报告里的 测试方法可以进一步提升到日频，但是需要注意的是，交易频率越高，策略对交易水平的要求越高， 算法交易是非常有必要的辅助工具。</p>
+
+<p>如同“主题投资”和“行业投资”等是投资于拥有同一主题属性或行 业属性的一篮子股票一样，“因子投资”，顾名思义，是投资于具有 同一“因子”属性的一篮子股票。这里的因子可以是大/小盘、价值/成长这样的风格因 子，也可以是动量/反转这样的技术指标。因子投资可以投资于这些特定的对一篮子股票的收益和风险具有解 释力的属性(betas)，而非着力于选择个股(alpha)</p>
+
+<h2 id="后记">后记</h2>
+
+<p>总之学习金融的路程还很漫长。。。</p>
+
+
+                <hr>
+
+                
+                <!-- 多说 Share start -->
+                </style>
+                <div class="ds-share"
+                    style="text-align: right"
+                    data-thread-key="/2017/08/04/east-financial-report"
+                    data-title="东方证券金工研报阅读"
+                    data-url="http://0.0.0.0:80/2017/08/04/east-financial-report/"
+                    data-images="http://0.0.0.0:80/img/post-bg-kuaidi.jpg"
+                    data-content="前言
+
+感冒依旧没有好…
+
+总结一下昨天晚上看的8篇研报
+
+
+
+正文
+
+
+
+多因子选股模型的整个投资流程包括 alpha 模型的构建，风险模型的构建， 交... | 冰洁的博客 | Bingjie Blog " >
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat flat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo flat" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban flat" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- 多说 Share end-->
+                
+
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2017/07/26/financial-dataplatform/" data-toggle="tooltip" data-placement="top" title="金融数据智能分析平台">
+                        Previous<br>
+                        <span>金融数据智能分析平台</span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2017/10/30/alphazero/" data-toggle="tooltip" data-placement="top" title="阅读alpha zero笔记">
+                        Next<br>
+                        <span>阅读alpha zero笔记</span>
+                        </a>
+                    </li>
+                    
+                </ul>
+
+
+                
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread"
+                        data-thread-key="/2017/08/04/east-financial-report"
+                        data-title="东方证券金工研报阅读"
+                        data-url="http://0.0.0.0:80/2017/08/04/east-financial-report/" >
+                    </div>
+                </div>
+                <!-- 多说评论框 end -->
+                
+
+                
+
+            </div>
+
+    <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+                    
+                        <li><a href="http://lingyu.wang/">天镶的博客</a></li>
+                    
+                        <li><a href="http://hmqk1995.github.io">Luke的自留地</a></li>
+                    
+                        <li><a href="http://ebnbin.com/">Ebn's Blog</a></li>
+                    
+                        <li><a href="http://blog.smdcn.net">SmdCn's Blog</a></li>
+                    
+                        <li><a href="http://xieminis.me/">解旻的博客</a></li>
+                    
+                        <li><a href="http://dhong.co">DHong Say</a></li>
+                    
+                        <li><a href="http://ingf.github.io/">尹峰以为</a></li>
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    // dynamic User by Hux
+    var _user = 'huxblog';
+
+    // duoshuo comment query.
+    var duoshuoQuery = {short_name: _user };
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+                    
+
+                    <!-- add Weibo, Zhihu by Hux, add target = "_blank" to <a> by Hux -->
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/bingjie-gao">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/446101575@qq.com">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/Bingjie Gao">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://github.com/wanwan507">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Bingjie Blog 2017
+                    <br>
+                    Theme © <a href="http://mkxkx.top">Diane</a> |
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=huxpro&repo=huxpro.github.io&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js "></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+        hljs.initHighlightingOnLoad();
+    })
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+<!--fastClick.js -->
+<script>
+    async("http://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        // var $nav = document.querySelector("nav");
+        // if($nav) FastClick.attach($nav);
+
+        // global FastClick!!
+        FastClick.attach(document.body);    
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-49627206-1';
+    var _gaDomain = 'mkxkx.top';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = '4cc1f2d8f3067386cc5cdb626a202900';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

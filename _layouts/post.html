@@ -51,7 +51,7 @@ layout: default
 
                 <hr>
 
-                {% if site.duoshuo_share and site.duoshuo_username %}
+                {% if site.duoshuo_share && site.duoshuo_username %}
                 <!-- 多说 Share start -->
                 </style>
                 <div class="ds-share"
@@ -126,38 +126,38 @@ layout: default
                 sidebar-container">
 
                 <!-- Featured Tags -->
-                {{ if site.featured-tags }}
+                {% if site.featured-tags %}
                 <section>
                     <hr class="hidden-sm hidden-xs">
                     <h5><a href="/tags/">FEATURED TAGS</a></h5>
                     <div class="tags">
-        				{{ for tag in site.tags }}
-                            {{ if tag[1].size > {{site.featured-condition-size}} }}
+        				{% for tag in site.tags %}
+                            {% if tag[1].size > {{site.featured-condition-size}} %}
                 				<a href="/tags/#{{ tag[0] }}" title="{{ tag[0] }}" rel="{{ tag[1].size }}">
                                     {{ tag[0] }}
                                 </a>
-                            {{ endif }}
-        				{{ endfor }}
+                            {% endif %}
+        				{% endfor %}
         			</div>
                 </section>
-                {{ endif }}
+                {% endif %}
 
                 <!-- Friends Blog -->
-                {{ if site.friends }}
+                {% if site.friends %}
                 <hr>
                 <h5>FRIENDS</h5>
                 <ul class="list-inline">
-                    {{ for friend in site.friends }}
+                    {% for friend in site.friends %}
                         <li><a href="{{friend.href}}">{{friend.title}}</a></li>
-                    {{ endfor }}
+                    {% endfor %}
                 </ul>
-                {{ endif }}
+                {% endif %}
             </div>
         </div>
     </div>
 </article>
 
-{{ if site.duoshuo_username }}
+{% if site.duoshuo_username %}
 <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 <script type="text/javascript">
     // dynamic User by Hux
@@ -175,10 +175,10 @@ layout: default
     })();
 </script>
 <!-- 多说公共JS代码 end -->
-{{ endif }}
+{% endif %}
 
 
-{{ if site.disqus_username }}
+{% if site.disqus_username %}
 <!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
 <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES * * */
@@ -193,10 +193,10 @@ layout: default
     })();
 </script>
 <!-- disqus 公共JS代码 end -->
-{{ endif }}
+{% endif %}
 
 
-{{ if site.anchorjs }}
+{% if site.anchorjs %}
 <!-- async load function -->
 <script>
     function async(u, c) {
@@ -230,4 +230,4 @@ layout: default
         }
     }
 </style>
-{{ endif }}
+{% endif %}
